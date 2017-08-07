@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Shtik.Render.Markdown
+namespace ShtikLive.Rendering.Markdown
 {
     public class Slide
     {

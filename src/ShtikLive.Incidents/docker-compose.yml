@@ -1,0 +1,13 @@
+﻿# Design-time dependencies
+
+version: '3'
+
+services:
+  
+  postgres:
+    image: postgres:9
+    environment:
+      POSTGRES_USER: incidents
+      POSTGRES_PASSWORD: secretsquirrel
+    ports:
+      - 5432:5432

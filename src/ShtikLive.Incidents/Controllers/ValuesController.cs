@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Shtik.Render.Markdown.Controllers
+namespace ShtikLive.Incidents.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller

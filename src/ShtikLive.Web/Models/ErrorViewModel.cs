@@ -1,6 +1,4 @@
-using System;
-
-namespace Shtik.Web.Models
+namespace ShtikLive.Web.Models
 {
     public class ErrorViewModel
     {

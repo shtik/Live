@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Shtik.Render.Markdown
+namespace ShtikLive.Incidents
 {
     public class Startup
     {

@@ -1,10 +1,7 @@
+﻿using System.Collections.Generic;
 using SharpYaml.Serialization;
-using Markdig;
-using System.Text;
-using System.IO;
-using System.Collections.Generic;
 
-namespace Shtik.Render.Markdown
+namespace ShtikLive.Rendering.Markdown
 {
     public class Renderer
     {

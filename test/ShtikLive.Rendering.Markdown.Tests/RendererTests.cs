@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Shtik.Render.Markdown.Tests
+namespace ShtikLive.Rendering.Markdown.Tests
 {
     public class RendererTests
     {

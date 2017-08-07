@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Shtik.Render.Markdown
+namespace ShtikLive.Incidents
 {
     public class Program
     {

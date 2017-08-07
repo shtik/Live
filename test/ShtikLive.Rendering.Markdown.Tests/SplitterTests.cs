@@ -3,7 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Shtik.Render.Markdown.Tests
+namespace ShtikLive.Rendering.Markdown.Tests
 {
     public class SplitterTests
     {

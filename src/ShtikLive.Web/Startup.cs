@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShtikLive.Web.Shows;
 
 namespace ShtikLive.Web
 {
@@ -17,6 +18,7 @@ namespace ShtikLive.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ShowOptions>(Configuration.GetSection("ShowOptions"));
 
             services.AddMvc();
         }

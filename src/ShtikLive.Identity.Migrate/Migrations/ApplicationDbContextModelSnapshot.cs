@@ -142,6 +142,9 @@ namespace ShtikLive.Identity.Migrate.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("Handle")
+                        .HasMaxLength(16);
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");

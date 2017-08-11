@@ -32,6 +32,7 @@ namespace ShtikLive.Identity.Migrate.Migrations
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bool", nullable: false),
+                    Handle = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bool", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamptz", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),

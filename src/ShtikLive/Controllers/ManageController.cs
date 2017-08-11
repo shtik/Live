@@ -23,18 +23,20 @@ namespace ShtikLive.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IApiKeyProvider _apiKeyProvider;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ISmsSender smsSender,
-          ILoggerFactory loggerFactory)
+          ILoggerFactory loggerFactory, IApiKeyProvider apiKeyProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
+            _apiKeyProvider = apiKeyProvider;
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
 
@@ -63,7 +65,8 @@ namespace ShtikLive.Controllers
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                ApiKey = _apiKeyProvider.GetBase64(user.Handle)
             };
             return View(model);
         }

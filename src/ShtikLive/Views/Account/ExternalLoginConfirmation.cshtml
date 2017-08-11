@@ -13,9 +13,16 @@
 
     <p class="text-info">
         You've successfully authenticated with <strong>@ViewData["LoginProvider"]</strong>.
-        Please enter an email address for this site below and click the Register button to finish
+        Please enter a handle and an email address for this site below and click the Register button to finish
         logging in.
     </p>
+    <div class="form-group">
+        <label asp-for="Handle" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Handle" class="form-control" />
+            <span asp-validation-for="Handle" class="text-danger"></span>
+        </div>
+    </div>
     <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label"></label>
         <div class="col-md-10">

@@ -11,7 +11,7 @@ using System;
 namespace ShtikLive.Identity.Migrate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170809183507_InitialCreate")]
+    [Migration("20170811132558_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,6 +142,9 @@ namespace ShtikLive.Identity.Migrate.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("Handle")
+                        .HasMaxLength(16);
 
                     b.Property<bool>("LockoutEnabled");
 

@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using ShtikLive.Shows.Models;
 
 namespace ShtikLive.Shows.Data
 {
@@ -15,5 +14,6 @@ namespace ShtikLive.Shows.Data
         }
 
         public DbSet<Show> Shows { get; set; }
+        public DbSet<Slide> Slides { get; set; }
     }
 }

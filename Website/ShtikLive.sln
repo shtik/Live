@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.0
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}"
 EndProject
@@ -10,15 +10,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Rendering.Markdow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Rendering.Markdown.Tests", "test\ShtikLive.Rendering.Markdown.Tests\ShtikLive.Rendering.Markdown.Tests.csproj", "{02CD90A7-DB9C-43AA-B334-2DEC4B9636C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Shows", "src\ShtikLive.Shows\ShtikLive.Shows.csproj", "{EC88E10B-5815-4359-B497-1713562BAB88}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive", "src\ShtikLive\ShtikLive.csproj", "{DFC71DC6-5A92-49A3-9006-DDAC16563337}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Identity", "src\ShtikLive.Identity\ShtikLive.Identity.csproj", "{639C8BBA-1A2C-4338-BDC9-30CA1C509904}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Identity.Migrate", "src\ShtikLive.Identity.Migrate\ShtikLive.Identity.Migrate.csproj", "{704960F0-DA3A-4063-8B72-BB8B913DCEEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShtikLive.Identity.Tests", "test\ShtikLive.Identity.Tests\ShtikLive.Identity.Tests.csproj", "{E80B3FFE-115C-4F17-A887-A3B35E0EDD01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShtikLive.Identity.Tests", "test\ShtikLive.Identity.Tests\ShtikLive.Identity.Tests.csproj", "{E80B3FFE-115C-4F17-A887-A3B35E0EDD01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,18 +52,6 @@ Global
 		{02CD90A7-DB9C-43AA-B334-2DEC4B9636C3}.Release|x64.Build.0 = Release|Any CPU
 		{02CD90A7-DB9C-43AA-B334-2DEC4B9636C3}.Release|x86.ActiveCfg = Release|Any CPU
 		{02CD90A7-DB9C-43AA-B334-2DEC4B9636C3}.Release|x86.Build.0 = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|x64.Build.0 = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Debug|x86.Build.0 = Debug|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|x64.ActiveCfg = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|x64.Build.0 = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|x86.ActiveCfg = Release|Any CPU
-		{EC88E10B-5815-4359-B497-1713562BAB88}.Release|x86.Build.0 = Release|Any CPU
 		{DFC71DC6-5A92-49A3-9006-DDAC16563337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFC71DC6-5A92-49A3-9006-DDAC16563337}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFC71DC6-5A92-49A3-9006-DDAC16563337}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -121,7 +107,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9701FB1F-AAA5-471A-AD59-0D87B160C9F9} = {5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}
 		{02CD90A7-DB9C-43AA-B334-2DEC4B9636C3} = {4C279B64-D2FB-4D7F-AC60-94EF1D81CC4C}
-		{EC88E10B-5815-4359-B497-1713562BAB88} = {5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}
 		{DFC71DC6-5A92-49A3-9006-DDAC16563337} = {5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}
 		{639C8BBA-1A2C-4338-BDC9-30CA1C509904} = {5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}
 		{704960F0-DA3A-4063-8B72-BB8B913DCEEB} = {5CBB3EB8-D3FD-4E1E-8884-4D040AE5264F}

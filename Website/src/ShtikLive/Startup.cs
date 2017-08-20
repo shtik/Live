@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ShtikLive.Clients;
 using ShtikLive.Identity;
 using ShtikLive.Services;
 
@@ -29,6 +30,9 @@ namespace ShtikLive
             {
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.Configure<Options.Services>(Configuration.GetSection("Services"));
+            services.AddSingleton<IShowsClient, ShowsClient>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

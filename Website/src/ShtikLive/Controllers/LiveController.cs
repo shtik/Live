@@ -1,21 +1,38 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using ShtikLive.Clients;
 
 namespace ShtikLive.Controllers
 {
     [Route("live")]
     public class LiveController : Controller
     {
-        [HttpGet("{presenter}")]
-        public Task<IActionResult> Presenter(string presenter)
+        private readonly IShowsClient _shows;
+        private readonly ILogger _logger;
+
+        public LiveController(IShowsClient shows, ILogger<LiveController> logger)
         {
-            throw new NotImplementedException();
+            _shows = shows;
+            _logger = logger;
+        }
+
+        [HttpGet("{presenter}")]
+        public async Task<IActionResult> Presenter(string presenter)
+        {
+            var show = await _shows.GetLatest(presenter);
+            if (show == null)
+            {
+                _logger.LogWarning(EventIds.PresenterShowNotFound, "Show not found for presenter '{presenter}'", presenter);
+                return NotFound();
+            }
+            return RedirectToAction("Show", new {presenter, slug = show.Slug});
         }
 
         // GET
-        [HttpGet("{presenter}/{session}")]
-        public IActionResult Index()
+        [HttpGet("{presenter}/{slug}")]
+        public IActionResult Show(string presenter, string slug)
         {
             throw new NotImplementedException();
         }

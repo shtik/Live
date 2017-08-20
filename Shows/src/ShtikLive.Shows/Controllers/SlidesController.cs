@@ -34,5 +34,23 @@ namespace ShtikLive.Shows.Controllers
                 .ConfigureAwait(false);
             return slide == null ? NotFound() : Ok(slide);
         }
+
+        [HttpPut("show/{showId}/{number}")]
+        public async Task<IActionResult> ShowSlideNumber(int showId, int number)
+        {
+            var slide = await _context.Slides
+                .SingleOrDefaultAsync(s => s.ShowId == showId && s.Number == number)
+                .ConfigureAwait(false);
+
+            if (slide == null) return NotFound();
+
+            if (!slide.Shown)
+            {
+                slide.Shown = true;
+                await _context.SaveChangesAsync();
+            }
+
+            return Accepted();
+        }
     }
 }

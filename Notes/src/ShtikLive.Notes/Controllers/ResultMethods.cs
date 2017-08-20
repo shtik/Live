@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ShtikLive.Shows.Controllers
+namespace ShtikLive.Notes.Controllers
 {
     public static class ResultMethods
     {

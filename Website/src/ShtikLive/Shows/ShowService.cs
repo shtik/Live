@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using ShtikLive.Web.Models;
+using ShtikLive.Models.Live;
 
 namespace ShtikLive.Web.Shows
 {

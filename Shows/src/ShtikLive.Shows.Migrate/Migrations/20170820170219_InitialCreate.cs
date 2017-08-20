@@ -16,6 +16,7 @@ namespace ShtikLive.Shows.Migrate.Migrations
                     Id = table.Column<int>(type: "int4", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Place = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    Presenter = table.Column<string>(type: "varchar(16)", maxLength: 16, nullable: true),
                     Slug = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     Time = table.Column<DateTimeOffset>(type: "timestamptz", nullable: false),
                     Title = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -32,9 +33,10 @@ namespace ShtikLive.Shows.Migrate.Migrations
                     Id = table.Column<int>(type: "int4", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Html = table.Column<string>(type: "text", nullable: true),
-                    Index = table.Column<int>(type: "int4", nullable: false),
                     Layout = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    Number = table.Column<int>(type: "int4", nullable: false),
                     ShowId = table.Column<int>(type: "int4", nullable: false),
+                    Shown = table.Column<bool>(type: "bool", nullable: false),
                     Title = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>

@@ -8,6 +8,9 @@ namespace ShtikLive.Shows.Data
     {
         public int Id { get; set; }
 
+        [MaxLength(16)]
+        public string Presenter { get; set; }
+
         [MaxLength(256)]
         public string Slug { get; set; }
 

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using ShtikLive.Web.Models;
+using ShtikLive.Models.Live;
 
 namespace ShtikLive.Web.Shows
 {

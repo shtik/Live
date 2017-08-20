@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShtikLive.Identity;
-using ShtikLive.Web.Models;
+using ShtikLive.Models.Live;
 
 namespace ShtikLive.Controllers
 {

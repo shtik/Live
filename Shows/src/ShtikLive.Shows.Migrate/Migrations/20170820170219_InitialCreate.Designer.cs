@@ -11,7 +11,7 @@ using System;
 namespace ShtikLive.Shows.Migrate.Migrations
 {
     [DbContext(typeof(ShowContext))]
-    [Migration("20170819224325_InitialCreate")]
+    [Migration("20170820170219_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +28,9 @@ namespace ShtikLive.Shows.Migrate.Migrations
 
                     b.Property<string>("Place")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Presenter")
+                        .HasMaxLength(16);
 
                     b.Property<string>("Slug")
                         .HasMaxLength(256);
@@ -49,12 +52,14 @@ namespace ShtikLive.Shows.Migrate.Migrations
 
                     b.Property<string>("Html");
 
-                    b.Property<int>("Index");
-
                     b.Property<string>("Layout")
                         .HasMaxLength(256);
 
+                    b.Property<int>("Number");
+
                     b.Property<int>("ShowId");
+
+                    b.Property<bool>("Shown");
 
                     b.Property<string>("Title")
                         .HasMaxLength(256);

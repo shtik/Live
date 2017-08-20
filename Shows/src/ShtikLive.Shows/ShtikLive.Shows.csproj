@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <ProjectReference Include="..\ShtikLive.Shows.Data\ShtikLive.Shows.Data.csproj" />
   </ItemGroup>
 
 </Project>

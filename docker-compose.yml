@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  # web:
+  #   build: 
+  #     context: ./Website
+  #   ports:
+  #     - 47668:80
+  #   networks: 
+  #     shtiknet:
+  #   environment:
+  #     ConnectionStrings__DefaultConnection: 'Host=postgres;Database=aspnet;Username=shtik;Password=secretsquirrel'
+  
+  web_migrate:
+    build:
+      context: ./Website
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      - postgres
+    command: Host=postgres;Database=aspnet;Username=shtik;Password=secretsquirrel
+    networks:
+      shtiknet:
+
+  # shows:
+  #   build: 
+  #     context: ./Shows
+  #   networks: 
+  #     shtiknet:
+  #   environment:
+  #     ConnectionStrings__DefaultConnection: 'Host=postgres;Database=shows;Username=shtik;Password=secretsquirrel'
+  
+  shows_migrate:
+    build:
+      context: ./Shows
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      - postgres
+    command: Host=postgres;Database=shows;Username=shtik;Password=secretsquirrel
+    networks:
+      shtiknet:
+  
+  # redis:
+  #   image: redis:4.0.1-alpine
+  #   networks:
+  #     shtiknet:
+  
+  postgres:
+    image: postgres:9.6.4-alpine
+    environment:
+      POSTGRES_USER: shtik
+      POSTGRES_PASSWORD: secretsquirrel
+    ports:
+      - 5432:5432
+    networks:
+      shtiknet:
+
+
+networks:
+  shtiknet:
+    driver: bridge

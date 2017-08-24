@@ -2,5 +2,9 @@
   {
     "outputFile": "wwwroot/lib/jquery/jquery.es5.js",
     "inputFile": "wwwroot/lib/jquery/jquery.js"
+  },
+  {
+    "outputFile": "wwwroot/css/theme.css",
+    "inputFile": "wwwroot/css/theme.scss"
   }
 ]

@@ -1,0 +1,11 @@
+FROM rendlelabs/dotnet-ef-migrate:2.0.0
+
+WORKDIR /src
+
+COPY . .
+
+WORKDIR /src/src/ShtikLive.Identity.Migrate
+
+RUN dotnet restore
+
+ENTRYPOINT ["dotnet", "run"]

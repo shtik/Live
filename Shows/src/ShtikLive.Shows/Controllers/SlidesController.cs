@@ -17,36 +17,27 @@ namespace ShtikLive.Shows.Controllers
             _context = context;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{presenter}/{slug}/{number}")]
+        public async Task<IActionResult> GetShowSlideNumber(string presenter, string slug, int number)
         {
             var slide = await _context.Slides
-                .SingleOrDefaultAsync(s => s.Id == id)
+                .SingleOrDefaultAsync(s => s.Show.Presenter == presenter && s.Show.Slug == slug && s.Number == number)
                 .ConfigureAwait(false);
             return slide == null ? NotFound() : Ok(slide);
         }
 
-        [HttpGet("show/{showId}/{number}")]
-        public async Task<IActionResult> GetShowSlideNumber(int showId, int number)
+        [HttpPut("show/{presenter}/{slug}/{number}")]
+        public async Task<IActionResult> ShowSlideNumber(string presenter, string slug, int number)
         {
             var slide = await _context.Slides
-                .SingleOrDefaultAsync(s => s.ShowId == showId && s.Number == number)
-                .ConfigureAwait(false);
-            return slide == null ? NotFound() : Ok(slide);
-        }
-
-        [HttpPut("show/{showId}/{number}")]
-        public async Task<IActionResult> ShowSlideNumber(int showId, int number)
-        {
-            var slide = await _context.Slides
-                .SingleOrDefaultAsync(s => s.ShowId == showId && s.Number == number)
+                .SingleOrDefaultAsync(s => s.Show.Presenter == presenter && s.Show.Slug == slug && s.Number == number)
                 .ConfigureAwait(false);
 
             if (slide == null) return NotFound();
 
-            if (!slide.Shown)
+            if (!slide.HasBeenShown)
             {
-                slide.Shown = true;
+                slide.HasBeenShown = true;
                 await _context.SaveChangesAsync();
             }
 

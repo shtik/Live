@@ -32,11 +32,11 @@ namespace ShtikLive.Shows.Migrate.Migrations
                 {
                     Id = table.Column<int>(type: "int4", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    HasBeenShown = table.Column<bool>(type: "bool", nullable: false),
                     Html = table.Column<string>(type: "text", nullable: true),
                     Layout = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     Number = table.Column<int>(type: "int4", nullable: false),
                     ShowId = table.Column<int>(type: "int4", nullable: false),
-                    Shown = table.Column<bool>(type: "bool", nullable: false),
                     Title = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -49,6 +49,12 @@ namespace ShtikLive.Shows.Migrate.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shows_Presenter_Slug",
+                table: "Shows",
+                columns: new[] { "Presenter", "Slug" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Slides_ShowId",

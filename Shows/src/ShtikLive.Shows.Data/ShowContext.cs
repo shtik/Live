@@ -15,5 +15,13 @@ namespace ShtikLive.Shows.Data
 
         public DbSet<Show> Shows { get; set; }
         public DbSet<Slide> Slides { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Show>()
+                .HasIndex(s => new { s.Presenter, s.Slug })
+                .IsUnique();
+        }
     }
 }

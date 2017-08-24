@@ -29,13 +29,25 @@ namespace ShtikLive.Clients
 
         public async Task<Show> GetLatest(string presenter)
         {
-            var response = await _http.GetAsync($"/shows/by/{presenter}/latest").ConfigureAwait(false);
+            var response = await _http.GetAsync($"/shows/find/by/{presenter}/latest").ConfigureAwait(false);
             return await response.Deserialize<Show>();
         }
 
-        public async Task<bool> ShowingSlide(int showId, int slideNumber)
+        public async Task<Show> Get(string presenter, string slug)
         {
-            var response = await _http.PutAsync($"slides/show/{showId}/{slideNumber}", new StringContent(string.Empty))
+            var response = await _http.GetAsync($"/shows/{presenter}/{slug}").ConfigureAwait(false);
+            return await response.Deserialize<Show>();
+        }
+
+        public async Task<Slide> GetSlide(string presenter, string slug, int number)
+        {
+            var response = await _http.GetAsync($"/slides/{presenter}/{slug}/{number}").ConfigureAwait(false);
+            return await response.Deserialize<Slide>();
+        }
+
+        public async Task<bool> ShowSlide(string presenter, string slug, int number)
+        {
+            var response = await _http.PutAsync($"slides/show/{presenter}/{slug}/{number}", new StringContent(string.Empty))
                 .ConfigureAwait(false);
             if (response.IsSuccessStatusCode) return true;
             if (response.StatusCode == HttpStatusCode.NotFound)
@@ -44,5 +56,7 @@ namespace ShtikLive.Clients
             }
             throw new UpstreamServiceException(response.StatusCode, response.ReasonPhrase);
         }
+
+
     }
 }

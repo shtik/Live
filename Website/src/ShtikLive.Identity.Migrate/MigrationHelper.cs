@@ -46,6 +46,10 @@ namespace ShtikLive.Identity.Migrate
 
         private async Task TryConnect(ApplicationDbContext context)
         {
+            var connectionString = context.Database.GetDbConnection().ConnectionString;
+            var builder = new NpgsqlConnectionStringBuilder(connectionString) { Database = null };
+            connectionString = builder.ConnectionString;
+
             try
             {
                 await Policy
@@ -57,8 +61,11 @@ namespace ShtikLive.Identity.Migrate
                     .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)))
                     .ExecuteAsync(async () =>
                     {
-                        await context.Database.OpenConnectionAsync();
-                        context.Database.CloseConnection();
+                        using (var connection = new NpgsqlConnection(connectionString))
+                        {
+                            await connection.OpenAsync();
+                            Console.WriteLine($"Connected: {connectionString}");
+                        }
                     });
             }
             catch (Exception ex)

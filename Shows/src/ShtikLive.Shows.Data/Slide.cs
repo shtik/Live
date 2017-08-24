@@ -18,6 +18,8 @@ namespace ShtikLive.Shows.Data
 
         public string Html { get; set; }
 
-        public bool Shown { get; set; }
+        public bool HasBeenShown { get; set; }
+
+        public Show Show { get; set; }
     }
 }

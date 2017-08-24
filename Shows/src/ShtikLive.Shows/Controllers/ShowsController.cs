@@ -27,14 +27,14 @@ namespace ShtikLive.Shows.Controllers
             return CreatedAtAction("Get", "Shows", new {id = show.Id}, show);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{presenter}/{slug}")]
+        public async Task<IActionResult> Get(string presenter, string slug)
         {
-            var show = await _context.Shows.SingleOrDefaultAsync(s => s.Id == id).ConfigureAwait(false);
+            var show = await _context.Shows.SingleOrDefaultAsync(s => s.Presenter == presenter && s.Slug == slug).ConfigureAwait(false);
             return show == null ? NotFound() : Ok(show);
         }
 
-        [HttpGet("by/{handle}")]
+        [HttpGet("find/by/{handle}")]
         public async Task<IActionResult> ListByPresenter(string handle)
         {
             var shows = await _context.Shows
@@ -45,7 +45,7 @@ namespace ShtikLive.Shows.Controllers
             return Ok(shows);
         }
 
-        [HttpGet("by/{handle}/latest")]
+        [HttpGet("find/by/{handle}/latest")]
         public async Task<IActionResult> LatestByPresenter(string handle)
         {
             var show = await _context.Shows

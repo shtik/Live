@@ -11,7 +11,7 @@ using System;
 namespace ShtikLive.Shows.Migrate.Migrations
 {
     [DbContext(typeof(ShowContext))]
-    [Migration("20170820170219_InitialCreate")]
+    [Migration("20170824111732_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace ShtikLive.Shows.Migrate.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Presenter", "Slug")
+                        .IsUnique();
+
                     b.ToTable("Shows");
                 });
 
@@ -49,6 +52,8 @@ namespace ShtikLive.Shows.Migrate.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("HasBeenShown");
 
                     b.Property<string>("Html");
 
@@ -58,8 +63,6 @@ namespace ShtikLive.Shows.Migrate.Migrations
                     b.Property<int>("Number");
 
                     b.Property<int>("ShowId");
-
-                    b.Property<bool>("Shown");
 
                     b.Property<string>("Title")
                         .HasMaxLength(256);
@@ -73,7 +76,7 @@ namespace ShtikLive.Shows.Migrate.Migrations
 
             modelBuilder.Entity("ShtikLive.Shows.Data.Slide", b =>
                 {
-                    b.HasOne("ShtikLive.Shows.Data.Show")
+                    b.HasOne("ShtikLive.Shows.Data.Show", "Show")
                         .WithMany("Slides")
                         .HasForeignKey("ShowId")
                         .OnDelete(DeleteBehavior.Cascade);

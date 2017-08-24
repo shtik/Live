@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Semantics;
 using Microsoft.Extensions.Logging;
 using ShtikLive.Clients;
 using ShtikLive.Identity;
@@ -33,13 +34,13 @@ namespace ShtikLive.Controllers
             }
             show.Presenter = handle;
             show = await _shows.Start(show).ConfigureAwait(false);
-            return CreatedAtAction("ShowSlide", new {id = show.Id}, show);
+            return CreatedAtAction("Show", "Live", new {presenter = show.Presenter, slug = show.Slug}, show);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ShowSlide(int id, [FromBody]ShowingSlide showingSlide)
+        [HttpPut("{handle}/{slug}/{number}")]
+        public async Task<IActionResult> ShowSlide(string handle, string slug, int number)
         {
-            var ok = await _shows.ShowingSlide(id, showingSlide.Number);
+            var ok = await _shows.ShowSlide(handle, slug, number);
             if (!ok) return NotFound();
             return Accepted();
         }

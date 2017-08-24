@@ -7,6 +7,8 @@ namespace ShtikLive.Clients
     {
         Task<Show> Start(Show show);
         Task<Show> GetLatest(string presenter);
-        Task<bool> ShowingSlide(int showId, int slideNumber);
+        Task<bool> ShowSlide(string presenter, string slug, int number);
+        Task<Show> Get(string presenter, string slug);
+        Task<Slide> GetSlide(string presenter, string slug, int number);
     }
 }

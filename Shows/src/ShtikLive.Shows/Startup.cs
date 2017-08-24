@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShtikLive.Shows.Data;
+using StackExchange.Redis;
 
 namespace ShtikLive.Shows
 {
@@ -18,6 +19,8 @@ namespace ShtikLive.Shows
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(ConnectionMultiplexer.Connect(Configuration["Redis:Host"]));
+
             services.AddDbContextPool<ShowContext>(b =>
             {
                 b.UseNpgsql(Configuration.GetConnectionString("Shows"));

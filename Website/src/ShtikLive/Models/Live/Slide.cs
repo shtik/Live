@@ -2,9 +2,9 @@
 {
     public class Slide
     {
-        public int Id { get; set; }
-        public int ShowId { get; set; }
-        public int Index { get; set; }
+        public string Presenter { get; set; }
+        public string Slug { get; set; }
+        public int Number { get; set; }
         public string Title { get; set; }
         public string Layout { get; set; }
         public string Html { get; set; }

@@ -4,7 +4,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <MvcRazorCompileOnPublish>true</MvcRazorCompileOnPublish>
     <UserSecretsId>aspnet-ShtikLive-455B2906-E84D-40BC-A58A-5CBBD0D16BF1</UserSecretsId>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\shtik.ts" />
+  </ItemGroup>
 
 
   <ItemGroup>
@@ -20,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShtikLive.Identity\ShtikLive.Identity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\js\shtik.ts" />
   </ItemGroup>
 
 </Project>

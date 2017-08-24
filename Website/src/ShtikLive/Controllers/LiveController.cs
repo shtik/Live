@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ShtikLive.Clients;
+using ShtikLive.Models.Live;
 
 namespace ShtikLive.Controllers
 {
@@ -27,7 +28,7 @@ namespace ShtikLive.Controllers
                 _logger.LogWarning(EventIds.PresenterShowNotFound, "Show not found for presenter '{presenter}'", presenter);
                 return NotFound();
             }
-            return RedirectToAction("Show", new {presenter, slug = show.Slug});
+            return RedirectToAction("Show", new {presenter, slug = show.Slug, });
         }
 
         // GET
@@ -35,6 +36,24 @@ namespace ShtikLive.Controllers
         public IActionResult Show(string presenter, string slug)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpGet("{presenter}/{slug}/{number}")]
+        public async Task<IActionResult> ShowSlide(string presenter, string slug, int number)
+        {
+            var (show, slide) =
+                await MultiTask.Wait(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
+            if (show == null || slide == null) return NotFound();
+            var viewModel = new ShowSlideViewModel
+            {
+                Presenter = presenter,
+                Slug = slug,
+                Title = show.Title,
+                Time = show.Time,
+                Place = show.Place,
+                Slide = slide
+            };
+            return View(viewModel);
         }
     }
 }

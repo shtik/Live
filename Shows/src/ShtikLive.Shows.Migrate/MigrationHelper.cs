@@ -41,30 +41,37 @@ namespace ShtikLive.Shows.Migrate
             catch (Exception ex)
             {
                 // Ignored
-                LoggerExtensions.LogError(_logger, EventIds.MigrationFailed, ex, "Migration failed to run: {message}", ex.Message);
+                _logger.LogError(EventIds.MigrationFailed, ex, "Migration failed to run: {message}", ex.Message);
             }
         }
 
         private async Task TryConnect(ShowContext context)
         {
+            var connectionString = context.Database.GetDbConnection().ConnectionString;
+            var builder = new NpgsqlConnectionStringBuilder(connectionString) {Database = null};
+            connectionString = builder.ConnectionString;
+
             try
             {
                 await Policy
                     .Handle<NpgsqlException>((ex) =>
                     {
-                        LoggerExtensions.LogWarning(_logger, EventIds.MigrationTestConnectFailed, ex, "TryMigrate test connect failed, retrying.");
+                        _logger.LogWarning(EventIds.MigrationTestConnectFailed, ex, "TryMigrate test connect failed, retrying.");
                         return true;
                     })
                     .WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)))
                     .ExecuteAsync(async () =>
                     {
-                        await context.Database.OpenConnectionAsync();
-                        context.Database.CloseConnection();
+                        using (var connection = new NpgsqlConnection(connectionString))
+                        {
+                            await connection.OpenAsync();
+                            Console.WriteLine($"Connected: {connectionString}");
+                        }
                     });
             }
             catch (Exception ex)
             {
-                LoggerExtensions.LogError(_logger, EventIds.MigrationTestConnectFailed, ex, "TryMigrate could not connect to database.");
+                _logger.LogError(EventIds.MigrationTestConnectFailed, ex, "TryMigrate could not connect to database.");
                 throw;
             }
         }

@@ -6,7 +6,7 @@ namespace ShtikLive.Shows.Migrate
 {
     public class DesignTimeShowContextFactory : IDesignTimeDbContextFactory<ShowContext>
     {
-        public const string LocalPostgres = "Host=localhost;Database=shows;Username=shows;Password=secretsquirrel";
+        public const string LocalPostgres = "Host=localhost;Database=shows;Username=shtik;Password=secretsquirrel";
 
         public static readonly string MigrationAssemblyName =
             typeof(DesignTimeShowContextFactory).Assembly.GetName().Name;

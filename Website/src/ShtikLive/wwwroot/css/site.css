@@ -1,6 +1,8 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+﻿@import url('https://fonts.googleapis.com/css?family=Bangers');
+
+body {
+    padding-top: 60px;
+    padding-bottom: 60px;
 }
 
 /* Wrapping element */
@@ -52,4 +54,12 @@ textarea {
     .carousel-caption {
         display: none;
     }
+}
+
+a.navbar-brand {
+    font-family: 'Bangers'
+}
+
+.bangers {
+    font-family: 'Bangers'
 }

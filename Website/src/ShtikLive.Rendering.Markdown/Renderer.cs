@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Markdig;
 using SharpYaml.Serialization;
 
 namespace ShtikLive.Rendering.Markdown
@@ -6,6 +9,14 @@ namespace ShtikLive.Rendering.Markdown
     public class Renderer
     {
         private readonly Serializer _serializer = new Serializer();
+        private readonly MarkdownPipeline _pipeline;
+
+        public Renderer()
+        {
+            var pipelineBuilder = new MarkdownPipelineBuilder();
+            pipelineBuilder.Use<HtmlSanitizerExtension>();
+            _pipeline = pipelineBuilder.Build();
+        }
 
         public Slide Render(string frontMatter, string markdown)
         {
@@ -14,7 +25,7 @@ namespace ShtikLive.Rendering.Markdown
             return new Slide
             {
                 Metadata = metadata,
-                Html = Markdig.Markdown.ToHtml(markdown)
+                Html = Markdig.Markdown.ToHtml(markdown, _pipeline)
             };
         }
     }

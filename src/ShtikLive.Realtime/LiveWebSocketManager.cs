@@ -1,49 +1,93 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace ShtikLive.Realtime
 {
     public class LiveWebSocketManager
     {
-        private readonly ConcurrentDictionary<string, List<WebSocket>> _showSockets = new ConcurrentDictionary<string, List<WebSocket>>(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, MessageQueueSet> _showSockets = new ConcurrentDictionary<string, MessageQueueSet>(StringComparer.OrdinalIgnoreCase);
+        private readonly ILogger _logger;
 
-        public void Add(string show, WebSocket socket)
+        public LiveWebSocketManager(ILogger<LiveWebSocketManager> logger)
         {
-            var list = _showSockets.GetOrAdd(show, _ => new List<WebSocket>());
-            lock (((ICollection)list).SyncRoot)
+            _logger = logger;
+        }
+
+        public async Task Process(HttpContext context)
+        {
+            if (!context.WebSockets.IsWebSocketRequest) throw new InvalidOperationException();
+
+            var socket = await context.WebSockets.AcceptWebSocketAsync();
+            var show = context.Request.Path.ToString();
+            var messageQueue = new MessageQueue();
+            var queueSet = _showSockets.GetOrAdd(show, _ => new MessageQueueSet());
+            queueSet.Add(messageQueue);
+
+            var ct = context.RequestAborted;
+            while (!ct.IsCancellationRequested)
             {
-                if (!list.Contains(socket))
+                var message = await messageQueue.GetMessage();
+
+                if (socket.State != WebSocketState.Open || !ct.IsCancellationRequested)
                 {
-                    list.Add(socket);
+                    break;
+                }
+
+                try
+                {
+                    await socket.SendAsync(message, WebSocketMessageType.Text, true, ct);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(EventIds.SendError, ex, ex.Message);
+                    break;
                 }
             }
-        }
 
-        public bool TryGet(string show, out IEnumerable<WebSocket> sockets)
-        {
-            if (_showSockets.TryGetValue(show, out var list))
+            if (queueSet.Remove(messageQueue) == 0)
             {
-                sockets = list.AsEnumerable();
-                return true;
+                _showSockets.TryRemove(show, out _);
             }
-            sockets = Enumerable.Empty<WebSocket>();
-            return false;
+
+            await CloseSocket(socket, ct);
+
+            TryDispose(socket);
         }
 
-        public async Task SendAsync(string show, string data, CancellationToken ct = default(CancellationToken))
+        private void TryDispose(IDisposable socket)
         {
-            if (_showSockets.TryGetValue(show, out var list))
+            try
             {
-                var buffer = Encoding.UTF8.GetBytes(data);
-                var segment = new ArraySegment<byte>(buffer);
-                await Task.WhenAll(list.Select(ws => ws.SendAsync(segment, WebSocketMessageType.Text, true, ct)));
+                socket.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.CloseError, ex, ex.Message);
+            }
+        }
+
+        private async Task CloseSocket(WebSocket socket, CancellationToken ct)
+        {
+            try
+            {
+                await socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(EventIds.CloseError, ex, ex.Message);
+            }
+        }
+
+        public void Send(string show, string message)
+        {
+            if (_showSockets.TryGetValue(show, out var messageQueueSet))
+            {
+                messageQueueSet.Send(message);
             }
         }
     }

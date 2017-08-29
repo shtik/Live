@@ -19,5 +19,7 @@ namespace ShtikLive.Models.ManageViewModels
         public bool BrowserRemembered { get; set; }
 
         public string ApiKey { get; set; }
+
+        public string Handle { get; set; }
     }
 }

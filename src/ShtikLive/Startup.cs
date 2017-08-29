@@ -51,6 +51,8 @@ namespace ShtikLive
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ShtikClaimsPrincipalFactory>();
 
+            services.AddSingleton<IApiKeyProvider, ApiKeyProvider>();
+
             services.AddMvc();
         }
 

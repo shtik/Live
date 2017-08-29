@@ -5,7 +5,7 @@ namespace ShtikLive.Identity.Migrate
 {
     public class DesignTimeApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
-        public const string LocalPostgres = "Host=localhost;Database=aspnet;Username=aspnet;Password=secretsquirrel";
+        public const string LocalPostgres = "Host=localhost;Database=aspnet;Username=shtik;Password=secretsquirrel";
 
         public ApplicationDbContext CreateDbContext(string[] args)
         {

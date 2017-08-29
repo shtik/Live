@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
-using ShtikLive.Models.Live;
+using Shtik.Rendering.Markdown;
+using ShtikLive.Models.Present;
+using Show = ShtikLive.Models.Live.Show;
+using Slide = ShtikLive.Models.Live.Slide;
 
 namespace ShtikLive.Clients
 {
@@ -21,8 +23,27 @@ namespace ShtikLive.Clients
             };
         }
 
-        public async Task<Show> Start(Show show)
+        public async Task<Show> Start(StartShow startShow)
         {
+            var showRenderer = new ShowRenderer();
+            var renderedShow = showRenderer.Render(startShow.Markdown);
+            var show = new Show
+            {
+                Place = startShow.Place,
+                Presenter = startShow.Presenter,
+                Slug = startShow.Slug,
+                Time = startShow.Time,
+                Title = renderedShow.Metadata.GetStringOrDefault("title", startShow.Title),
+                Slides = renderedShow.Slides.Select((s,i) => new Slide
+                {
+                    Layout = (s.Metadata, renderedShow.Metadata).GetStringOrDefault("layout", "title-and-content"),
+                    Html = s.Html,
+                    Title = s.Metadata.GetStringOrDefault("title", string.Empty),
+                    Slug = startShow.Slug,
+                    Presenter = startShow.Presenter,
+                    Number = i
+                }).ToList()
+            };
             var response = await _http.PostJsonAsync("/shows/start", show).ConfigureAwait(false);
             return await response.Deserialize<Show>();
         }
@@ -56,7 +77,5 @@ namespace ShtikLive.Clients
             }
             throw new UpstreamServiceException(response.StatusCode, response.ReasonPhrase);
         }
-
-
     }
 }

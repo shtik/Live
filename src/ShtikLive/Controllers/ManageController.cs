@@ -66,7 +66,8 @@ namespace ShtikLive.Controllers
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                ApiKey = _apiKeyProvider.GetBase64(user.Handle)
+                ApiKey = _apiKeyProvider.GetBase64(user.Handle),
+                Handle = user.Handle
             };
             return View(model);
         }

@@ -38,5 +38,11 @@
     "inputFiles": [
       "wwwroot/lib/bootswatch/bootstrap.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap-social/bootstrap-social.min.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap-social/bootstrap-social.css"
+    ]
   }
 ]

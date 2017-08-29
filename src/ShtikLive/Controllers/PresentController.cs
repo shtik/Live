@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Semantics;
 using Microsoft.Extensions.Logging;
 using ShtikLive.Clients;
 using ShtikLive.Identity;
-using ShtikLive.Models.Live;
+using ShtikLive.Models.Present;
 
 namespace ShtikLive.Controllers
 {
@@ -24,7 +24,7 @@ namespace ShtikLive.Controllers
         }
 
         [HttpPost("{handle}/start")]
-        public async Task<IActionResult> Start(string handle, [FromBody] Show show)
+        public async Task<IActionResult> Start(string handle, [FromBody] StartShow startShow)
         {
             var apiKey = Request.Headers["API-Key"];
             if (!_apiKeyProvider.CheckBase64(handle, apiKey))
@@ -32,9 +32,9 @@ namespace ShtikLive.Controllers
                 _logger.LogWarning(EventIds.PresenterInvalidApiKey, "Invalid API key.");
                 return Forbid();
             }
-            show.Presenter = handle;
-            show = await _shows.Start(show).ConfigureAwait(false);
-            return CreatedAtAction("Show", "Live", new {presenter = show.Presenter, slug = show.Slug}, show);
+            startShow.Presenter = handle;
+            var show = await _shows.Start(startShow).ConfigureAwait(false);
+            return CreatedAtAction("Show", "Live", new {presenter = startShow.Presenter, slug = startShow.Slug}, show);
         }
 
         [HttpPut("{handle}/{slug}/{number}")]

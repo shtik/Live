@@ -1,4 +1,7 @@
-﻿namespace Shtik.AutoNav {
+﻿/// <reference path="./notes.ts" />
+
+namespace Shtik.AutoNav {
+    import NotesForm = Notes.NotesForm;
 
     interface IMessage {
         slide?: number;
@@ -11,7 +14,8 @@
     }
 
     function loadSlide(url: string) {
-        return fetch(url, { method: "GET" }).then(response => response.text());
+        return fetch(url, { method: "GET" })
+            .then(response => response.text());
     }
 
     function transition() {
@@ -28,6 +32,8 @@
         transition();
     }
 
+    var notesForm: NotesForm;
+
     document.addEventListener("DOMContentLoaded", () => {
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
@@ -42,6 +48,10 @@
         };
 
         window.addEventListener("popstate", transition);
+
+        notesForm = new NotesForm();
+        notesForm.load();
     });
 
+    console.log("Bobbins");
 }

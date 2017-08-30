@@ -1,0 +1,334 @@
+﻿@import "media.scss";
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+}
+
+body {
+    padding-top: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.layout {
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    align-items: flex-start;
+
+    @include media( "portrait" ) {
+        flex-direction: column;
+    }
+}
+
+.slide {
+    width: 1920px;
+    height: 1080px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transform-origin: top left;
+
+    @include media( "landscape" ) {
+        @include media( "320" ) {
+            transform: scale(0.125);
+        }
+
+        @include media( "480" ) {
+            transform: scale(0.1875);
+        }
+
+        @include media( "600" ) {
+            transform: scale(0.234375);
+        }
+
+        @include media( "768" ) {
+            transform: scale(0.3);
+        }
+
+        @include media( "800" ) {
+            transform: scale(0.3125);
+        }
+
+        @include media( "960" ) {
+            transform: scale(0.375);
+        }
+
+        @include media( "1024" ) {
+            transform: scale(0.4);
+        }
+
+        @include media( "1280" ) {
+            transform: scale(0.5);
+        }
+
+        @include media( "1280" ) {
+            transform: scale(0.5625);
+        }
+
+        @include media( "1920" ) {
+            transform: scale(0.75);
+        }
+
+        @include media( "2560" ) {
+            transform: scale(1);
+        }
+
+        @include media( "3840" ) {
+            transform: scale(1.5);
+        }
+
+        @include media( "7680" ) {
+            transform: scale(3);
+        }
+    }
+
+    @include media( "portrait" ) {
+        @include media( "320" ) {
+            transform: scale(0.1666667);
+        }
+
+        @include media( "480" ) {
+            transform: scale(0.25);
+        }
+
+        @include media( "600" ) {
+            transform: scale(0.3125);
+        }
+
+        @include media( "768" ) {
+            transform: scale(0.4);
+        }
+
+        @include media( "800" ) {
+            transform: scale(0.4166667);
+        }
+
+        @include media( "960" ) {
+            transform: scale(0.5);
+        }
+
+        @include media( "1024" ) {
+            transform: scale(0.533333);
+        }
+
+        @include media( "1280" ) {
+            transform: scale(0.666667);
+        }
+
+        @include media( "1280" ) {
+            transform: scale(0.666667);
+        }
+
+        @include media( "1920" ) {
+            transform: scale(1);
+        }
+
+        @include media( "2560" ) {
+            transform: scale(1.333333);
+        }
+
+        @include media( "3840" ) {
+            transform: scale(2);
+        }
+
+        @include media( "7680" ) {
+            transform: scale(4);
+        }
+    }
+}
+
+.slide-container {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    flex: none;
+
+    @include media("portrait") {
+
+        margin-left: auto;
+        margin-right: auto;
+
+        @include media( "320" ) {
+            width: 320px;
+            height: 180px;
+        }
+
+        @include media( "480" ) {
+            width: 480px;
+            height: 270px;
+        }
+
+        @include media( "600" ) {
+            width: 600px;
+            height: 338px;
+        }
+
+        @include media( "768" ) {
+            width: 768px;
+            height: 432px;
+        }
+
+        @include media( "800" ) {
+            width: 800px;
+            height: 450px;
+        }
+
+        @include media( "960" ) {
+            width: 960px;
+            height: 540px;
+        }
+
+        @include media( "1024" ) {
+            width: 1024px;
+            height: 576px;
+        }
+
+        @include media( "1280" ) {
+            width: 1280px;
+            height: 720px;
+        }
+
+        @include media( "1920" ) {
+            width: 1920px;
+            height: 1080px;
+        }
+
+        @include media( "2560" ) {
+            width: 1920px;
+            height: 1080px;
+        }
+
+        @include media( "3840" ) {
+            width: 1920px;
+            height: 1080px;
+        }
+
+        @include media( "7680" ) {
+            width: 1920px;
+            height: 1080px;
+        }
+    }
+
+    @include media("landscape") {
+
+        @include media( "320" ) {
+            width: 240px;
+            height: 135px;
+        }
+
+        @include media( "480" ) {
+            width: 360px;
+            height: 203px;
+        }
+
+        @include media( "600" ) {
+            width: 450px;
+            height: 254px;
+        }
+
+        @include media( "768" ) {
+            width: 576px;
+            height: 324px;
+        }
+
+        @include media( "800" ) {
+            width: 600px;
+            height: 338px;
+        }
+
+        @include media( "960" ) {
+            width: 720px;
+            height: 405px;
+        }
+
+        @include media( "1024" ) {
+            width: 768px;
+            height: 432px;
+        }
+
+        @include media( "1280" ) {
+            width: 960px;
+            height: 540px;
+        }
+
+        @include media( "1920" ) {
+            width: 1440px;
+            height: 810px;
+        }
+    }
+}
+
+@include media( "landscape" ) {
+    .controls {
+        height: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-flow: column nowrap;
+        max-height: 80vh;
+
+        form {
+            display: flex;
+            flex-flow: column nowrap;
+            margin: 15px;
+
+            label {
+                font-weight: bold;
+            }
+
+            textarea {
+                flex-grow: 1;
+                margin-bottom: 5px;
+            }
+        }
+
+        form#notes {
+            flex: 2 1 auto;
+        }
+
+        form#question {
+            flex: 1 1 auto;
+        }
+
+        div#spacer {
+            flex: 1 1 auto;
+        }
+    }
+}
+
+@include media( "portrait" ) {
+    .controls {
+        width: 100%;
+        flex-grow: 1;
+        display: flex;
+        flex-flow: row nowrap;
+        max-height: 50vh;
+
+        form {
+            display: flex;
+            flex-flow: column nowrap;
+            margin: 15px;
+
+            label {
+                font-weight: bold;
+            }
+
+            textarea {
+                flex-grow: 1;
+                margin-bottom: 5px;
+                max-width: 100%;
+            }
+        }
+
+        form#notes {
+            flex: 1 1 auto;
+        }
+
+        form#question {
+            flex: 1 1 auto;
+        }
+
+        div#spacer {
+            display: none;
+        }
+    }
+}

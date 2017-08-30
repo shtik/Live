@@ -33,6 +33,7 @@ namespace ShtikLive
 
             services.Configure<Options.Services>(Configuration.GetSection("Services"));
             services.AddSingleton<IShowsClient, ShowsClient>();
+            services.AddSingleton<INotesClient, NotesClient>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

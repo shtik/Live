@@ -1,4 +1,13 @@
-﻿@model ShtikLive.Models.Live.ShowSlideViewModel
+﻿@using ShtikLive.Identity
+
+@model ShtikLive.Models.Live.ShowSlideViewModel
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 
@@ -7,20 +16,88 @@
     <title>@Model.Slide.Title | @Model.Title</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootswatch/bootstrap.css" />
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-social/bootstrap-social.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/slides.css" />
         <link href="~/css/theme.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+              integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+              crossorigin="anonymous"
+              asp-fallback-href="~/lib/font-awesome/css/font-awesome.min.css"
+              asp-fallback-test-class="fa-2x" asp-fallback-test-property="font-size" asp-fallback-test-value="2em" />
+        <link href="~/lib/bootstrap-social/bootstrap-social.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/slides.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
-<div class="slide">
-      @Html.Raw(Model.Slide.Html)
-</div>
-    <nav class="navbar navbar-default navbar-fixed-bottom"></nav>
+    <div class="layout">
+        <div class="slide-container">
+        <div class="slide">
+            <main>
+                <article class="@Model.Slide.Layout">
+                    @Html.Raw(Model.Slide.Html)
+                </article>
+            </main>
+        </div>
+        </div>
+        <div class="controls">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form id="notes">
+                    <label for="notesText" class="control-label">Notes:</label>
+                    <textarea id="notesText" class="form-control"></textarea>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+                <form id="question">
+                    <label for="questionText" class="control-label">Ask a Question:</label>
+                    <textarea id="questionText" class="form-control"></textarea>
+                    <button type="submit" class="btn btn-primary">Ask</button>
+                </form>
+                <div id="spacer"></div>
+            }
+            else
+            {
+                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-center">Sign in to create Notes or ask Questions</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-8 col-md-offset-2 col-sm-12">
+                        
+                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@Context.Request.Path.Value" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in loginProviders)
+                                {
+                                    <button type="submit" class="btn btn-block btn-lg btn-social btn-@provider.Name.ToLowerInvariant()" name="provider" value="@provider.Name" title="Sign in using @provider.DisplayName account">
+                                        <span class="fa fa-@provider.Name.ToLowerInvariant()"></span>Sign in with @provider.Name
+                                    </button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                    </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <nav id="bottom" class="navbar navbar-default navbar-fixed-bottom"></nav>
+    <environment include="Development">
+        <script src="~/js/shtik.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/shtik.min.js"></script>
+    </environment>
 </body>
 </html>

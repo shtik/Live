@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/css/theme.css",
     "inputFile": "wwwroot/css/theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/slides.css",
+    "inputFile": "wwwroot/css/slides.scss"
   }
 ]

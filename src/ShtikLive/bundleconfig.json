@@ -44,5 +44,18 @@
     "inputFiles": [
       "wwwroot/lib/bootstrap-social/bootstrap-social.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/shtik.js",
+    "inputFiles": [
+      "Scripts/notes.js",
+      "Scripts/shtik.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/shtik.min.js",
+    "inputFiles": [
+      "wwwroot/js/shtik.js"
+    ]
   }
 ]

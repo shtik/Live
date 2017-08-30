@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -10,11 +11,18 @@ namespace ShtikLive.Clients
     {
         private const string ApplicationJson = "application/json";
 
-        public static Task<HttpResponseMessage> PostJsonAsync(this HttpClient client, string uri, object obj)
+        public static Task<HttpResponseMessage> PostJsonAsync(this HttpClient client, string uri, object obj, CancellationToken ct = default(CancellationToken))
         {
             var json = JsonConvert.SerializeObject(obj);
             var content = new StringContent(json, Encoding.UTF8, ApplicationJson);
-            return client.PostAsync(uri, content);
+            return client.PostAsync(uri, content, ct);
+        }
+
+        public static Task<HttpResponseMessage> PutJsonAsync(this HttpClient client, string uri, object obj, CancellationToken ct = default(CancellationToken))
+        {
+            var json = JsonConvert.SerializeObject(obj);
+            var content = new StringContent(json, Encoding.UTF8, ApplicationJson);
+            return client.PutAsync(uri, content, ct);
         }
 
         public static ValueTask<T> Deserialize<T>(this HttpResponseMessage response)

@@ -49,13 +49,15 @@
     "outputFileName": "wwwroot/js/shtik.js",
     "inputFiles": [
       "Scripts/notes.js",
+      "Scripts/questions.js",
+      "Scripts/nav.js",
       "Scripts/shtik.js"
     ]
   },
   {
-    "outputFileName": "wwwroot/js/shtik.min.js",
+    "outputFileName": "wwwroot/js/presenter.js",
     "inputFiles": [
-      "wwwroot/js/shtik.js"
+      "Scripts/presenter.js"
     ]
   }
 ]

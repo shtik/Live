@@ -10,6 +10,7 @@
         private _button: HTMLButtonElement;
         private _saving: boolean;
         private _autosaveTimeout: number;
+        public dirty: boolean;
 
         constructor() {
             this._form = document.getElementById("notes") as HTMLFormElement;
@@ -18,6 +19,8 @@
             window.addEventListener("popstate", this.load);
             this._textarea.addEventListener("keyup", this._autoSave);
             this._textarea.addEventListener("paste", this._autoSave);
+            this._textarea.addEventListener("focus", () => this.dirty = true);
+            this._textarea.addEventListener("blur", () => this.dirty = false);
         }
 
         private _autoSave = () => {

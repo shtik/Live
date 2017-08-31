@@ -46,11 +46,11 @@ namespace ShtikLive.Controllers
             return RedirectToAction("ShowSlide", new { presenter, slug, number = latestSlide.Number });
         }
 
-        [HttpGet("{presenter}/{slug}/{number}")]
+        [HttpGet("{presenter}/{slug}/{number:int}")]
         public async Task<IActionResult> ShowSlide(string presenter, string slug, int number)
         {
             var (show, slide) =
-                await MultiTask.Wait(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
+                await MultiTask.WhenAll(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
             if (show == null || (slide == null || !slide.HasBeenShown)) return NotFound();
 
             slide.Html = ProcessSlideHtml(slide.Html);
@@ -65,6 +65,23 @@ namespace ShtikLive.Controllers
                 Slide = slide
             };
             return View(viewModel);
+        }
+
+        [HttpGet("{presenter}/{slug}/{number:int}/partial")]
+        public async Task<IActionResult> GetSlidePartial(string presenter, string slug, int number)
+        {
+            var (show, slide) =
+                await MultiTask.WhenAll(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
+            if (show == null || (slide == null || !slide.HasBeenShown)) return NotFound();
+
+            var slidePartial = new SlidePartial
+            {
+                Layout = slide.Layout,
+                Html = ProcessSlideHtml(slide.Html),
+                Title = slide.Title
+            };
+
+            return Ok(slidePartial);
         }
 
         private string ProcessSlideHtml(string html)

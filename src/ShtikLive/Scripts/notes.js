@@ -62,6 +62,8 @@ var Shtik;
                 window.addEventListener("popstate", this.load);
                 this._textarea.addEventListener("keyup", this._autoSave);
                 this._textarea.addEventListener("paste", this._autoSave);
+                this._textarea.addEventListener("focus", () => this.dirty = true);
+                this._textarea.addEventListener("blur", () => this.dirty = false);
             }
             get notesUrl() {
                 const path = window.location.pathname.split("/");

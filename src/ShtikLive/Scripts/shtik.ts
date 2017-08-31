@@ -1,57 +1,51 @@
 ﻿/// <reference path="./notes.ts" />
+/// <reference path="./questions.ts" />
+/// <reference path="./nav.ts" />
 
 namespace Shtik.AutoNav {
     import NotesForm = Notes.NotesForm;
+    import QuestionsForm = Questions.QuestionsForm;
+    import NavButtons = Nav.NavButtons;
 
+// ReSharper disable InconsistentNaming
     interface IMessage {
-        slide?: number;
+        MessageType: string;
+        Slide?: number;
     }
+// ReSharper restore InconsistentNaming
 
-    interface IPartial {
-        slide: {
-            html: string;
-        }
-    }
-
-    function loadSlide(url: string) {
-        return fetch(url, { method: "GET" })
-            .then(response => response.text());
-    }
-
-    function transition() {
-        const url = window.location.href + "/partial";
-        loadSlide(url)
-            .then(json => {
-                const partial = JSON.parse(json) as IPartial;
-                document.querySelector("div.slide").innerHTML = partial.slide.html;
-            });
-    }
-
-    function go(href) {
-        history.pushState(null, null, href);
-        transition();
-    }
 
     var notesForm: NotesForm;
+    var questionsForm: QuestionsForm;
+    var nav: NavButtons;
 
     document.addEventListener("DOMContentLoaded", () => {
+
+        notesForm = new NotesForm();
+        notesForm.load();
+
+        questionsForm = new QuestionsForm();
+        questionsForm.load();
+
+        nav = new NavButtons();
+
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
         const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
         const wsUri = `${protocol}//${window.location.host}${path}`;
         const socket = new WebSocket(wsUri);
 
-        socket.onmessage = e => {
+        socket.addEventListener("message", e => {
             const data = JSON.parse(e.data) as IMessage;
-            if (data.slide) {
-                go(window.location.pathname.replace(/\/[0-9]+$/, `${data.slide}`));
+            if (data.MessageType === "slideshown") {
+                if (notesForm.dirty || questionsForm.dirty) return;
+                nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.Slide}`));
             }
-        };
+        });
 
-        window.addEventListener("popstate", transition);
+        socket.addEventListener("message", questionsForm.onMessage);
 
-        notesForm = new NotesForm();
-        notesForm.load();
+
     });
 
-    console.log("Bobbins");
+    console.log("Wibble");
 }

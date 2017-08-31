@@ -23,7 +23,7 @@ namespace ShtikLive.Realtime
             if (!context.WebSockets.IsWebSocketRequest) throw new InvalidOperationException();
 
             var socket = await context.WebSockets.AcceptWebSocketAsync();
-            var show = context.Request.Path.ToString();
+            var show = context.Request.Path.ToString().Trim('/');
             var messageQueue = new MessageQueue();
             var queueSet = _showSockets.GetOrAdd(show, _ => new MessageQueueSet());
             queueSet.Add(messageQueue);
@@ -33,7 +33,7 @@ namespace ShtikLive.Realtime
             {
                 var message = await messageQueue.GetMessage();
 
-                if (socket.State != WebSocketState.Open || !ct.IsCancellationRequested)
+                if (socket.State != WebSocketState.Open || ct.IsCancellationRequested)
                 {
                     break;
                 }

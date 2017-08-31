@@ -243,13 +243,16 @@ body {
       .controls form label {
         font-weight: bold; }
       .controls form textarea {
-        flex-grow: 1;
         margin-bottom: 5px; }
+      .controls form textarea.full-height {
+        flex-grow: 1; }
+      .controls form ul#question-list {
+        flex-grow: 1;
+        max-height: 20vh;
+        overflow-y: auto; }
     .controls form#notes {
-      flex: 2 1 auto; }
-    .controls form#question {
       flex: 1 1 auto; }
-    .controls div#spacer {
+    .controls form#question {
       flex: 1 1 auto; } }
 
 @media screen and (orientation: portrait) {
@@ -266,9 +269,15 @@ body {
       .controls form label {
         font-weight: bold; }
       .controls form textarea {
-        flex-grow: 1;
         margin-bottom: 5px;
         max-width: 100%; }
+      .controls form textarea.full-height {
+        flex-grow: 1; }
+      .controls form ul#question-list {
+        flex-grow: 1;
+        margin-bottom: 5px;
+        max-width: 100%;
+        overflow-y: auto; }
     .controls form#notes {
       flex: 1 1 auto; }
     .controls form#question {

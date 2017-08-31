@@ -8,5 +8,6 @@ namespace ShtikLive
 
         public static readonly EventId PresenterShowNotFound = Base + 1;
         public static readonly EventId PresenterInvalidApiKey = Base + 2;
+        public static readonly EventId AnonymousAccess = Base + 3;
     }
 }

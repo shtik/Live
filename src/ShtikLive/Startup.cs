@@ -34,6 +34,7 @@ namespace ShtikLive
             services.Configure<Options.Services>(Configuration.GetSection("Services"));
             services.AddSingleton<IShowsClient, ShowsClient>();
             services.AddSingleton<INotesClient, NotesClient>();
+            services.AddSingleton<IQuestionsClient, QuestionsClient>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -54,6 +55,8 @@ namespace ShtikLive
 
             services.AddSingleton<IApiKeyProvider, ApiKeyProvider>();
 
+            services.AddLiveWebSockets(Configuration);
+
             services.AddMvc();
         }
 
@@ -73,6 +76,9 @@ namespace ShtikLive
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseWebSockets();
+            app.UseLiveWebSockets();
 
             app.UseMvc(routes =>
             {

@@ -1,42 +1,38 @@
 /// <reference path="./notes.ts" />
+/// <reference path="./questions.ts" />
+/// <reference path="./nav.ts" />
 var Shtik;
 (function (Shtik) {
     var AutoNav;
     (function (AutoNav) {
         var NotesForm = Shtik.Notes.NotesForm;
-        function loadSlide(url) {
-            return fetch(url, { method: "GET" })
-                .then(response => response.text());
-        }
-        function transition() {
-            const url = window.location.href + "/partial";
-            loadSlide(url)
-                .then(json => {
-                const partial = JSON.parse(json);
-                document.querySelector("div.slide").innerHTML = partial.slide.html;
-            });
-        }
-        function go(href) {
-            history.pushState(null, null, href);
-            transition();
-        }
+        var QuestionsForm = Shtik.Questions.QuestionsForm;
+        var NavButtons = Shtik.Nav.NavButtons;
+        // ReSharper restore InconsistentNaming
         var notesForm;
+        var questionsForm;
+        var nav;
         document.addEventListener("DOMContentLoaded", () => {
+            notesForm = new NotesForm();
+            notesForm.load();
+            questionsForm = new QuestionsForm();
+            questionsForm.load();
+            nav = new NavButtons();
             const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
             const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
             const wsUri = `${protocol}//${window.location.host}${path}`;
             const socket = new WebSocket(wsUri);
-            socket.onmessage = e => {
+            socket.addEventListener("message", e => {
                 const data = JSON.parse(e.data);
-                if (data.slide) {
-                    go(window.location.pathname.replace(/\/[0-9]+$/, `${data.slide}`));
+                if (data.MessageType === "slideshown") {
+                    if (notesForm.dirty || questionsForm.dirty)
+                        return;
+                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.Slide}`));
                 }
-            };
-            window.addEventListener("popstate", transition);
-            notesForm = new NotesForm();
-            notesForm.load();
+            });
+            socket.addEventListener("message", questionsForm.onMessage);
         });
-        console.log("Bobbins");
+        console.log("Wibble");
     })(AutoNav = Shtik.AutoNav || (Shtik.AutoNav = {}));
 })(Shtik || (Shtik = {}));
 //# sourceMappingURL=shtik.js.map

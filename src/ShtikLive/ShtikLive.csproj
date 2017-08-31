@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" />
     <PackageReference Include="Shtik.Rendering.Markdown" Version="0.2.0" />
+    <PackageReference Include="StackExchange.Redis.StrongName" Version="1.2.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShtikLive.Identity\ShtikLive.Identity.csproj" />
+    <ProjectReference Include="..\ShtikLive.Realtime\ShtikLive.Realtime.csproj" />
   </ItemGroup>
 
   <ItemGroup>

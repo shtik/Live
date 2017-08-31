@@ -1,4 +1,4 @@
-FROM rendlelabs/dotnet-ef-migrate:2.0.0
+FROM microsoft/aspnetcore-build:2 AS build
 
 WORKDIR /src
 
@@ -8,4 +8,12 @@ WORKDIR /src/src/ShtikLive.Identity.Migrate
 
 RUN dotnet restore
 
-ENTRYPOINT ["dotnet", "run"]
+RUN dotnet publish --output /app/ --configuration Release
+
+FROM microsoft/aspnetcore:2
+
+COPY --from=build /app /app/
+
+WORKDIR /app
+
+ENTRYPOINT ["dotnet", "ShtikLive.Identity.Migrate.dll"]

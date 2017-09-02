@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShtikLive.Clients;
@@ -13,8 +16,11 @@ namespace ShtikLive
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
 
@@ -56,6 +62,15 @@ namespace ShtikLive
             services.AddSingleton<IApiKeyProvider, ApiKeyProvider>();
 
             services.AddLiveWebSockets(Configuration);
+
+            if (!_env.IsDevelopment())
+            {
+                var blobUri = Configuration.GetValue("DataProtection:BlobUri", string.Empty);
+                if ((!string.IsNullOrWhiteSpace(blobUri)) && Uri.TryCreate(blobUri, UriKind.Absolute, out var uri))
+                {
+                    services.AddDataProtection().PersistKeysToAzureBlobStorage(uri);
+                }
+            }
 
             services.AddMvc();
         }

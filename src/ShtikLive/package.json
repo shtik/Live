@@ -1,0 +1,22 @@
+{
+  "name": "shtik-live",
+  "version": "1.0.0",
+  "description": "Online Shtik",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shtik/Live.git"
+  },
+  "author": "Mark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shtik/Live/issues"
+  },
+  "homepage": "https://github.com/shtik/Live#readme",
+  "dependencies": {
+    "@aspnet/signalr-client": "^1.0.0-alpha1-final"
+  }
+}

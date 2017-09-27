@@ -55,7 +55,7 @@ body {
   .slide {
     transform: scale(0.5); } }
 
-@media screen and (orientation: landscape) and (min-width: 1280px) and (max-width: 1439px) {
+@media screen and (orientation: landscape) and (min-width: 1440px) and (max-width: 1919px) {
   .slide {
     transform: scale(0.5625); } }
 

@@ -18,6 +18,8 @@ var Shtik;
                     }, 2000);
                 };
                 this.load = () => {
+                    if (!this._textarea)
+                        return;
                     fetch(this.notesUrl, { method: "GET", credentials: "same-origin" })
                         .then(r => r.text())
                         .then(t => {
@@ -26,7 +28,7 @@ var Shtik;
                     });
                 };
                 this.save = () => {
-                    if (!this._setSaving(true))
+                    if (!this._textarea || !this._setSaving(true))
                         return Promise.resolve(false);
                     const notes = this._textarea.value;
                     const json = JSON.stringify({ text: notes });
@@ -57,13 +59,17 @@ var Shtik;
                     return this._saving;
                 };
                 this._form = document.getElementById("notes");
-                this._textarea = this._form.querySelector("textarea");
-                this._button = this._form.querySelector("button");
-                window.addEventListener("popstate", this.load);
-                this._textarea.addEventListener("keyup", this._autoSave);
-                this._textarea.addEventListener("paste", this._autoSave);
-                this._textarea.addEventListener("focus", () => this.dirty = true);
-                this._textarea.addEventListener("blur", () => this.dirty = false);
+                if (!!this._form) {
+                    this._textarea = this._form.querySelector("textarea");
+                    this._button = this._form.querySelector("button");
+                    window.addEventListener("popstate", this.load);
+                    if (this._textarea) {
+                        this._textarea.addEventListener("keyup", this._autoSave);
+                        this._textarea.addEventListener("paste", this._autoSave);
+                        this._textarea.addEventListener("focus", () => this.dirty = true);
+                        this._textarea.addEventListener("blur", () => this.dirty = false);
+                    }
+                }
             }
             get notesUrl() {
                 const path = window.location.pathname.split("/");

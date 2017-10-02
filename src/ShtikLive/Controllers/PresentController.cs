@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,9 +69,15 @@ namespace ShtikLive.Controllers
         [HttpPut("{handle}/{slug}/{number}")]
         public async Task<IActionResult> ShowSlide(string handle, string slug, int number, CancellationToken ct)
         {
+            byte[] content;
+            using (var stream = new MemoryStream(32768))
+            {
+                await Request.Body.CopyToAsync(stream);
+                content = stream.ToArray();
+            }
             var (ok, uri) = await MultiTask.WhenAll(
                 _shows.ShowSlide(handle, slug, number, ct),
-                _slides.Upload(handle, slug, number, Request.ContentType, Request.Body, ct)
+                _slides.Upload(handle, slug, number, Request.ContentType, content, ct)
             );
             if (!ok) return NotFound();
             return Accepted(uri);

@@ -1,4 +1,5 @@
-﻿@import "media.scss";
+﻿$landscape: "only screen and (orientation: landscape)";
+$portrait: "only screen and (orientation: portrait)";
 
 html, body {
     width: 100vw;
@@ -11,40 +12,44 @@ body {
     overflow-y: hidden;
 }
 
-@include media( "landscape" ) {
-
-    .layout {
-        flex-flow: row nowrap;
-
-        
-    }
-
-}
-
 .layout {
     width: 100vw;
     height: calc(100% - 60px);
     display: flex;
     align-items: stretch;
 
-    @include media( "landscape" ) {
+    @media #{$landscape} {
         flex-direction: row;
     }
 
-    @include media( "portrait" ) {
+    @media #{$portrait} {
         flex-direction: column;
     }
 }
 
-.slide-image {
+#slide-container {
+    display: flex;
+    flex-direction: column;
+    @media #{$landscape} {
+        flex: 3 0 auto;
+    }
+
+    @media #{$portrait} {
+        width: 100%;
+        height: calc(100vw * 0.5126);
+        flex: none none auto;
+    }
+}
+
+#slide-image {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     flex-grow: 1;
 }
 
-@include media( "landscape" ) {
-    .controls {
+@media #{$landscape} {
+    #controls {
         height: 100%;
         flex-grow: 1;
         display: flex;
@@ -86,7 +91,7 @@ body {
     }
 }
 
-@include media( "portrait" ) {
+@media #{$portrait} {
     .controls {
         width: 100%;
         flex-grow: 1;

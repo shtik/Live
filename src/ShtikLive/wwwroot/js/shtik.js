@@ -18,6 +18,8 @@ var Shtik;
                     }, 2000);
                 };
                 this.load = () => {
+                    if (!this._textarea)
+                        return;
                     fetch(this.notesUrl, { method: "GET", credentials: "same-origin" })
                         .then(r => r.text())
                         .then(t => {
@@ -26,7 +28,7 @@ var Shtik;
                     });
                 };
                 this.save = () => {
-                    if (!this._setSaving(true))
+                    if (!this._textarea || !this._setSaving(true))
                         return Promise.resolve(false);
                     const notes = this._textarea.value;
                     const json = JSON.stringify({ text: notes });
@@ -57,13 +59,17 @@ var Shtik;
                     return this._saving;
                 };
                 this._form = document.getElementById("notes");
-                this._textarea = this._form.querySelector("textarea");
-                this._button = this._form.querySelector("button");
-                window.addEventListener("popstate", this.load);
-                this._textarea.addEventListener("keyup", this._autoSave);
-                this._textarea.addEventListener("paste", this._autoSave);
-                this._textarea.addEventListener("focus", () => this.dirty = true);
-                this._textarea.addEventListener("blur", () => this.dirty = false);
+                if (!!this._form) {
+                    this._textarea = this._form.querySelector("textarea");
+                    this._button = this._form.querySelector("button");
+                    window.addEventListener("popstate", this.load);
+                    if (this._textarea) {
+                        this._textarea.addEventListener("keyup", this._autoSave);
+                        this._textarea.addEventListener("paste", this._autoSave);
+                        this._textarea.addEventListener("focus", () => this.dirty = true);
+                        this._textarea.addEventListener("blur", () => this.dirty = false);
+                    }
+                }
             }
             get notesUrl() {
                 const path = window.location.pathname.split("/");
@@ -85,6 +91,8 @@ var Shtik;
         class QuestionsForm {
             constructor() {
                 this.load = () => {
+                    if (!this._list)
+                        return;
                     while (this._list.hasChildNodes()) {
                         this._list.removeChild(this._list.lastChild);
                     }
@@ -98,7 +106,7 @@ var Shtik;
                     });
                 };
                 this.save = () => {
-                    if (!this._setSaving(true))
+                    if (!this._textarea || !this._setSaving(true))
                         return Promise.resolve(false);
                     const question = this._textarea.value;
                     const json = JSON.stringify({ text: question });
@@ -155,14 +163,18 @@ var Shtik;
                     return this._saving;
                 };
                 this._form = document.getElementById("questions");
-                this._textarea = this._form.querySelector("textarea");
-                this._button = this._form.querySelector("button");
-                this._list = this._form.querySelector("ul#question-list");
-                window.addEventListener("popstate", this.load);
-                this._form.addEventListener("submit", this._onSubmit);
-                this._textarea.addEventListener("keyup", () => this.dirty = true);
-                this._textarea.addEventListener("paste", () => this.dirty = true);
-                this._textarea.addEventListener("focus", () => this.dirty = true);
+                if (!!this._form) {
+                    this._textarea = this._form.querySelector("textarea");
+                    this._button = this._form.querySelector("button");
+                    this._list = this._form.querySelector("ul#question-list");
+                    window.addEventListener("popstate", this.load);
+                    this._form.addEventListener("submit", this._onSubmit);
+                    if (this._textarea) {
+                        this._textarea.addEventListener("keyup", () => this.dirty = true);
+                        this._textarea.addEventListener("paste", () => this.dirty = true);
+                        this._textarea.addEventListener("focus", () => this.dirty = true);
+                    }
+                }
             }
             get questionsUrl() {
                 const path = window.location.pathname.split("/");
@@ -267,31 +279,30 @@ var Shtik;
         var NotesForm = Shtik.Notes.NotesForm;
         var QuestionsForm = Shtik.Questions.QuestionsForm;
         var NavButtons = Shtik.Nav.NavButtons;
-        // ReSharper restore InconsistentNaming
         var notesForm;
         var questionsForm;
         var nav;
+        var hubConnection;
         document.addEventListener("DOMContentLoaded", () => {
             notesForm = new NotesForm();
             notesForm.load();
             questionsForm = new QuestionsForm();
             questionsForm.load();
             nav = new NavButtons();
-            const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-            const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
-            const wsUri = `${protocol}//${window.location.host}${path}`;
-            const socket = new WebSocket(wsUri);
-            socket.addEventListener("message", e => {
-                const data = JSON.parse(e.data);
-                if (data.MessageType === "slideshown") {
+            hubConnection = new signalR.HubConnection("/realtime");
+            hubConnection.on("Send", data => {
+                if (data.slideAvailable) {
                     if (notesForm.dirty || questionsForm.dirty)
                         return;
-                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.Slide}`));
+                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
                 }
             });
-            socket.addEventListener("message", questionsForm.onMessage);
+            hubConnection.start()
+                .then(() => {
+                const groupName = window.location.pathname.replace(/\/[0-9]+$/, "");
+                hubConnection.invoke("Join", groupName);
+            });
         });
-        console.log("Wibble");
     })(AutoNav = Shtik.AutoNav || (Shtik.AutoNav = {}));
 })(Shtik || (Shtik = {}));
 //# sourceMappingURL=shtik.js.map

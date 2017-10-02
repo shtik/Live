@@ -6,6 +6,8 @@ var Shtik;
         class QuestionsForm {
             constructor() {
                 this.load = () => {
+                    if (!this._list)
+                        return;
                     while (this._list.hasChildNodes()) {
                         this._list.removeChild(this._list.lastChild);
                     }
@@ -19,7 +21,7 @@ var Shtik;
                     });
                 };
                 this.save = () => {
-                    if (!this._setSaving(true))
+                    if (!this._textarea || !this._setSaving(true))
                         return Promise.resolve(false);
                     const question = this._textarea.value;
                     const json = JSON.stringify({ text: question });
@@ -76,14 +78,18 @@ var Shtik;
                     return this._saving;
                 };
                 this._form = document.getElementById("questions");
-                this._textarea = this._form.querySelector("textarea");
-                this._button = this._form.querySelector("button");
-                this._list = this._form.querySelector("ul#question-list");
-                window.addEventListener("popstate", this.load);
-                this._form.addEventListener("submit", this._onSubmit);
-                this._textarea.addEventListener("keyup", () => this.dirty = true);
-                this._textarea.addEventListener("paste", () => this.dirty = true);
-                this._textarea.addEventListener("focus", () => this.dirty = true);
+                if (!!this._form) {
+                    this._textarea = this._form.querySelector("textarea");
+                    this._button = this._form.querySelector("button");
+                    this._list = this._form.querySelector("ul#question-list");
+                    window.addEventListener("popstate", this.load);
+                    this._form.addEventListener("submit", this._onSubmit);
+                    if (this._textarea) {
+                        this._textarea.addEventListener("keyup", () => this.dirty = true);
+                        this._textarea.addEventListener("paste", () => this.dirty = true);
+                        this._textarea.addEventListener("focus", () => this.dirty = true);
+                    }
+                }
             }
             get questionsUrl() {
                 const path = window.location.pathname.split("/");

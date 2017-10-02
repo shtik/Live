@@ -10,6 +10,6 @@ namespace ShtikLive.Models.Live
         public string Title { get; set; }
         public DateTimeOffset Time { get; set; }
         public string Place { get; set; }
-        public List<Slide> Slides { get; set; }
+        public int HighestSlideShown { get; set; }
     }
 }

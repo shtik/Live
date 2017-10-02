@@ -24,7 +24,7 @@ namespace ShtikLive.Clients
             };
         }
 
-        public async Task<Show> Start(StartShow startShow, CancellationToken ct = default(CancellationToken))
+        public async Task<Show> Start(StartShow startShow, CancellationToken ct = default)
         {
             var showRenderer = new ShowRenderer();
             var renderedShow = showRenderer.Render(startShow.Markdown);
@@ -35,47 +35,39 @@ namespace ShtikLive.Clients
                 Slug = startShow.Slug,
                 Time = startShow.Time,
                 Title = renderedShow.Metadata.GetStringOrDefault("title", startShow.Title),
-                Slides = renderedShow.Slides.Select((s,i) => new Slide
-                {
-                    Layout = (s.Metadata, renderedShow.Metadata).GetStringOrDefault("layout", "title-and-content"),
-                    Html = s.Html,
-                    Title = s.Metadata.GetStringOrDefault("title", string.Empty),
-                    Slug = startShow.Slug,
-                    Presenter = startShow.Presenter,
-                    Number = i
-                }).ToList()
+                HighestSlideShown = 0
             };
             var response = await _http.PostJsonAsync("/shows/start", show, ct: ct).ConfigureAwait(false);
             return await response.Deserialize<Show>();
         }
 
-        public async Task<Show> GetLatest(string presenter, CancellationToken ct = default(CancellationToken))
+        public async Task<Show> GetLatest(string presenter, CancellationToken ct = default)
         {
             var response = await _http.GetAsync($"/shows/find/by/{presenter}/latest", ct).ConfigureAwait(false);
             return await response.Deserialize<Show>();
         }
 
-        public async Task<Show> Get(string presenter, string slug, CancellationToken ct = default(CancellationToken))
+        public async Task<Show> Get(string presenter, string slug, CancellationToken ct = default)
         {
             var response = await _http.GetAsync($"/shows/{presenter}/{slug}", ct).ConfigureAwait(false);
             return await response.Deserialize<Show>();
         }
 
-        public async Task<Slide> GetLatestSlide(string presenter, string slug, CancellationToken ct = default(CancellationToken))
+        public async Task<Slide> GetLatestSlide(string presenter, string slug, CancellationToken ct = default)
         {
             var response = await _http.GetAsync($"/slides/{presenter}/{slug}/latest", ct).ConfigureAwait(false);
             return await response.Deserialize<Slide>();
         }
 
-        public async Task<Slide> GetSlide(string presenter, string slug, int number, CancellationToken ct = default(CancellationToken))
+        public async Task<Slide> GetSlide(string presenter, string slug, int number, CancellationToken ct = default)
         {
             var response = await _http.GetAsync($"/slides/{presenter}/{slug}/{number}", ct).ConfigureAwait(false);
             return await response.Deserialize<Slide>();
         }
 
-        public async Task<bool> ShowSlide(string presenter, string slug, int number, CancellationToken ct = default(CancellationToken))
+        public async Task<bool> ShowSlide(string presenter, string slug, int number, CancellationToken ct = default)
         {
-            var response = await _http.PutAsync($"slides/show/{presenter}/{slug}/{number}", new StringContent(string.Empty), ct)
+            var response = await _http.PutAsync($"/shows/{presenter}/{slug}?highestSlideShown={number}", new StringContent(string.Empty), ct)
                 .ConfigureAwait(false);
             if (response.IsSuccessStatusCode) return true;
             if (response.StatusCode == HttpStatusCode.NotFound)

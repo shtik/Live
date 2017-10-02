@@ -7,7 +7,7 @@ namespace ShtikLive.Clients
 {
     public interface ISlidesClient
     {
-        Task<string> Upload(string presenter, string show, int index, string contentType, Stream source, CancellationToken ct = default);
+        Task<string> Upload(string presenter, string show, int index, string contentType, byte[] source, CancellationToken ct = default);
         Task<HttpResponseMessage> Get(string presenter, string show, int index, CancellationToken ct = default);
     }
 }

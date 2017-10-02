@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShtikLive.Clients;
+using ShtikLive.Hubs;
 using ShtikLive.Identity;
 using ShtikLive.Services;
 
@@ -62,7 +63,7 @@ namespace ShtikLive
 
             services.AddSingleton<IApiKeyProvider, ApiKeyProvider>();
 
-            services.AddLiveWebSockets(Configuration);
+            //services.AddLiveWebSockets(Configuration);
 
             if (!_env.IsDevelopment())
             {
@@ -74,6 +75,7 @@ namespace ShtikLive
             }
 
             services.AddMvc();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,8 +95,10 @@ namespace ShtikLive
 
             app.UseAuthentication();
 
-            app.UseWebSockets();
-            app.UseLiveWebSockets();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<LiveHub>("realtime");
+            });
 
             app.UseMvc(routes =>
             {

@@ -22,6 +22,8 @@ namespace ShtikLive.Controllers
         {
             var response = await _client.Get(presenter, show, index, ct);
 
+            if (response == null) return NotFound();
+
             if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int) response.StatusCode);
 
             return new StreamResult(await response.Content.ReadAsStreamAsync(), response.Content.Headers.ContentType.ToString());

@@ -13,14 +13,13 @@
 
 <html>
 <head>
-    <title>@Model.Slide.Title | @Model.Title</title>
+    <title>@Model.Title</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootswatch/bootstrap.css" />
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
         <link href="~/lib/bootstrap-social/bootstrap-social.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/slides.css" />
-        <link href="~/css/theme.css" rel="stylesheet" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css"
@@ -39,11 +38,17 @@
 </head>
 <body>
     <div class="layout">
-        <div class="slide-container">
-            <div class="slide">
+        <div id="slide-container">
+            <div id="slide-image" style="background-image: url(/slides/@Model.Presenter/@Model.Slug/@Model.SlideNumber)">
+            </div>
+            <div id="nav-controls">
+                <button class="btn navbar-btn" id="first-btn"><span class="fa fa-step-backward"></span></button>
+                <button class="btn navbar-btn" id="previous-btn"><span class="fa fa-play fa-flip-horizontal"></span></button>
+                <button class="btn navbar-btn" id="next-btn"><span class="fa fa-play"></span></button>
+                <button class="btn navbar-btn" id="last-btn"><span class="fa fa-step-forward"></span></button>
             </div>
         </div>
-        <div class="controls">
+        <div id="controls">
             @if (SignInManager.IsSignedIn(User))
             {
                 <form id="notes">
@@ -90,22 +95,12 @@
             }
         </div>
     </div>
-<nav id="bottom" class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
-        <div class="row">
-            <div class="center-block">
-                <button class="btn navbar-btn" id="first-btn"><span class="fa fa-step-backward"></span></button>
-                <button class="btn navbar-btn" id="previous-btn"><span class="fa fa-play fa-flip-horizontal"></span></button>
-                <button class="btn navbar-btn" id="next-btn"><span class="fa fa-play"></span></button>
-                <button class="btn navbar-btn" id="last-btn"><span class="fa fa-step-forward"></span></button>
-            </div>
-        </div>
-    </div>
-</nav>
     <environment include="Development">
+        <script src="~/lib/signalr/signalr-client-1.0.0-alpha1-final.js"></script>
         <script src="~/js/shtik.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
+        <script src="~/lib/signalr/signalr-client-1.0.0-alpha1-final.js"></script>
         <script src="~/js/shtik.js" asp-append-version="true"></script>
     </environment>
 </body>

@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/slides.css",
     "inputFile": "wwwroot/css/slides.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/media.css",
+    "inputFile": "wwwroot/css/media.scss"
   }
 ]

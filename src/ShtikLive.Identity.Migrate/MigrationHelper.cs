@@ -53,7 +53,7 @@ namespace ShtikLive.Identity.Migrate
             try
             {
                 await Policy
-                    .Handle<NpgsqlException>((ex) =>
+                    .Handle<Exception>((ex) =>
                     {
                         _logger.LogWarning(EventIds.MigrationTestConnectFailed, ex, "TryMigrate test connect failed, retrying.");
                         return true;

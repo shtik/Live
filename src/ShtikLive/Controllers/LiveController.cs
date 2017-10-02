@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using ShtikLive.Clients;
 using ShtikLive.Models.Live;
@@ -37,23 +38,22 @@ namespace ShtikLive.Controllers
         [HttpGet("{presenter}/{slug}")]
         public async Task<IActionResult> Show(string presenter, string slug, CancellationToken ct)
         {
-            var latestSlide = await _shows.GetLatestSlide(presenter, slug, ct).ConfigureAwait(false);
-            if (latestSlide == null)
+            var show = await _shows.Get(presenter, slug, ct);
+            if (show == null)
             {
-                _logger.LogWarning(EventIds.PresenterShowNotFound, "Latest slide not found for show '{presenter}/{slug}'", presenter, slug);
+                _logger.LogWarning(EventIds.PresenterShowNotFound, "Show '{slug}' not found for presenter '{presenter}'", slug, presenter);
                 return NotFound();
             }
-            return RedirectToAction("ShowSlide", new { presenter, slug, number = latestSlide.Number });
+            return RedirectToAction("ShowSlide", new { presenter, slug, number = show.HighestSlideShown });
         }
 
         [HttpGet("{presenter}/{slug}/{number:int}")]
         public async Task<IActionResult> ShowSlide(string presenter, string slug, int number)
         {
-            var (show, slide) =
-                await MultiTask.WhenAll(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
-            if (show == null || (slide == null || !slide.HasBeenShown)) return NotFound();
-
-            slide.Html = ProcessSlideHtml(slide.Html);
+            var show = await _shows.Get(presenter, slug);
+            if (show == null) return NotFound();
+            if (show.HighestSlideShown < number)
+                return RedirectToAction("ShowSlide", new {presenter, slug, number = show.HighestSlideShown});
 
             var viewModel = new ShowSlideViewModel
             {
@@ -62,7 +62,7 @@ namespace ShtikLive.Controllers
                 Title = show.Title,
                 Time = show.Time,
                 Place = show.Place,
-                Slide = slide
+                SlideNumber = number
             };
             return View(viewModel);
         }

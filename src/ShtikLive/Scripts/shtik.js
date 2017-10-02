@@ -8,31 +8,30 @@ var Shtik;
         var NotesForm = Shtik.Notes.NotesForm;
         var QuestionsForm = Shtik.Questions.QuestionsForm;
         var NavButtons = Shtik.Nav.NavButtons;
-        // ReSharper restore InconsistentNaming
         var notesForm;
         var questionsForm;
         var nav;
+        var hubConnection;
         document.addEventListener("DOMContentLoaded", () => {
             notesForm = new NotesForm();
             notesForm.load();
             questionsForm = new QuestionsForm();
             questionsForm.load();
             nav = new NavButtons();
-            const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-            const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
-            const wsUri = `${protocol}//${window.location.host}${path}`;
-            const socket = new WebSocket(wsUri);
-            socket.addEventListener("message", e => {
-                const data = JSON.parse(e.data);
-                if (data.MessageType === "slideshown") {
+            hubConnection = new signalR.HubConnection("/realtime");
+            hubConnection.on("Send", data => {
+                if (data.slideAvailable) {
                     if (notesForm.dirty || questionsForm.dirty)
                         return;
-                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.Slide}`));
+                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
                 }
             });
-            socket.addEventListener("message", questionsForm.onMessage);
+            hubConnection.start()
+                .then(() => {
+                const groupName = window.location.pathname.replace(/\/[0-9]+$/, "");
+                hubConnection.invoke("Join", groupName);
+            });
         });
-        console.log("Wibble");
     })(AutoNav = Shtik.AutoNav || (Shtik.AutoNav = {}));
 })(Shtik || (Shtik = {}));
 //# sourceMappingURL=shtik.js.map

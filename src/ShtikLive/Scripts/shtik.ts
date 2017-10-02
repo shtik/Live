@@ -2,22 +2,29 @@
 /// <reference path="./questions.ts" />
 /// <reference path="./nav.ts" />
 
+// ReSharper disable once InconsistentNaming
+interface LiveMessage {
+    slideAvailable?: number;
+}
+declare namespace signalR {
+
+    export class HubConnection {
+        constructor(path: string);
+        on(method: string, action: (data: LiveMessage) => void);
+        invoke(method: string, data: any);
+        start(): Promise<any>;
+    }
+}
+
 namespace Shtik.AutoNav {
     import NotesForm = Notes.NotesForm;
     import QuestionsForm = Questions.QuestionsForm;
     import NavButtons = Nav.NavButtons;
 
-// ReSharper disable InconsistentNaming
-    interface IMessage {
-        MessageType: string;
-        Slide?: number;
-    }
-// ReSharper restore InconsistentNaming
-
-
     var notesForm: NotesForm;
     var questionsForm: QuestionsForm;
     var nav: NavButtons;
+    var hubConnection: signalR.HubConnection;
 
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -29,23 +36,18 @@ namespace Shtik.AutoNav {
 
         nav = new NavButtons();
 
-        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-        const path = window.location.pathname.substr(5).replace(/\/[0-9]+$/, "");
-        const wsUri = `${protocol}//${window.location.host}${path}`;
-        const socket = new WebSocket(wsUri);
-
-        socket.addEventListener("message", e => {
-            const data = JSON.parse(e.data) as IMessage;
-            if (data.MessageType === "slideshown") {
-                if (notesForm.dirty || questionsForm.dirty) return;
-                nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.Slide}`));
-            }
-        });
-
-        socket.addEventListener("message", questionsForm.onMessage);
-
-
+        hubConnection = new signalR.HubConnection("/realtime");
+        hubConnection.on("Send",
+            data => {
+                if (data.slideAvailable) {
+                    if (notesForm.dirty || questionsForm.dirty) return;
+                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
+                }
+            });
+        hubConnection.start()
+            .then(() => {
+                const groupName = window.location.pathname.replace(/\/[0-9]+$/, "");
+                hubConnection.invoke("Join", groupName);
+            });
     });
-
-    console.log("Wibble");
 }

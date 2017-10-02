@@ -28,18 +28,24 @@
 
         constructor() {
             this._form = document.getElementById("questions") as HTMLFormElement;
-            this._textarea = this._form.querySelector("textarea") as HTMLTextAreaElement;
-            this._button = this._form.querySelector("button") as HTMLButtonElement;
-            this._list = this._form.querySelector("ul#question-list") as HTMLUListElement;
-            window.addEventListener("popstate", this.load);
-            this._form.addEventListener("submit", this._onSubmit);
+            if (!!this._form) {
 
-            this._textarea.addEventListener("keyup", () => this.dirty = true);
-            this._textarea.addEventListener("paste", () => this.dirty = true);
-            this._textarea.addEventListener("focus", () => this.dirty = true);
+                this._textarea = this._form.querySelector("textarea") as HTMLTextAreaElement;
+                this._button = this._form.querySelector("button") as HTMLButtonElement;
+                this._list = this._form.querySelector("ul#question-list") as HTMLUListElement;
+                window.addEventListener("popstate", this.load);
+                this._form.addEventListener("submit", this._onSubmit);
+
+                if (this._textarea) {
+                    this._textarea.addEventListener("keyup", () => this.dirty = true);
+                    this._textarea.addEventListener("paste", () => this.dirty = true);
+                    this._textarea.addEventListener("focus", () => this.dirty = true);
+                }
+            }
         }
 
         public load = () => {
+            if (!this._list) return;
             while (this._list.hasChildNodes()) {
                 this._list.removeChild(this._list.lastChild);
             }
@@ -54,7 +60,7 @@
         };
 
         public save = () => {
-            if (!this._setSaving(true)) return Promise.resolve(false);
+            if (!this._textarea || !this._setSaving(true)) return Promise.resolve(false);
 
             const question = this._textarea.value;
             const json = JSON.stringify({text: question});

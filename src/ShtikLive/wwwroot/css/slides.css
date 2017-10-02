@@ -7,55 +7,63 @@ body {
   overflow-x: hidden;
   overflow-y: hidden; }
 
-@media screen and (orientation: landscape) {
-  .layout {
-    flex-flow: row nowrap; } }
-
 .layout {
   width: 100vw;
   height: calc(100% - 60px);
   display: flex;
   align-items: stretch; }
-  @media screen and (orientation: landscape) {
+  @media only screen and (orientation: landscape) {
     .layout {
       flex-direction: row; } }
-  @media screen and (orientation: portrait) {
+  @media only screen and (orientation: portrait) {
     .layout {
       flex-direction: column; } }
 
-.slide-image {
+#slide-container {
+  display: flex;
+  flex-direction: column; }
+  @media only screen and (orientation: landscape) {
+    #slide-container {
+      flex: 3 0 auto; } }
+  @media only screen and (orientation: portrait) {
+    #slide-container {
+      width: 100%;
+      height: calc(100vw * 0.5126);
+      flex: none none auto; } }
+
+#slide-image {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   flex-grow: 1; }
 
-@media screen and (orientation: landscape) {
-  .controls {
+@media only screen and (orientation: landscape) {
+  #controls {
     height: 100%;
     flex-grow: 1;
     display: flex;
     flex-flow: column nowrap;
     max-height: 80vh; }
-    .controls form {
+    #controls form {
       display: flex;
       flex-flow: column nowrap;
       margin: 15px; }
-      .controls form label {
+      #controls form label {
         font-weight: bold; }
-      .controls form textarea {
+      #controls form textarea {
         margin-bottom: 5px; }
-      .controls form textarea.full-height {
+      #controls form textarea.full-height {
         flex-grow: 1; }
-      .controls form ul#question-list {
+      #controls form ul#question-list {
         flex-grow: 1;
         max-height: 20vh;
         overflow-y: auto; }
-    .controls form#notes {
+    #controls form#notes {
       flex: 1 1 auto; }
-    .controls form#question {
+    #controls form#question {
       flex: 1 1 auto; } }
 
-@media screen and (orientation: portrait) {
+@media only screen and (orientation: portrait) {
   .controls {
     width: 100%;
     flex-grow: 1;

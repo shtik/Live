@@ -40,13 +40,8 @@
 <body>
     <div class="layout">
         <div class="slide-container">
-        <div class="slide">
-            <main>
-                <article id="slide" class="@Model.Slide.Layout">
-                    @Html.Raw(Model.Slide.Html)
-                </article>
-            </main>
-        </div>
+            <div class="slide">
+            </div>
         </div>
         <div class="controls">
             @if (SignInManager.IsSignedIn(User))

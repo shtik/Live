@@ -19,7 +19,7 @@ namespace ShtikLive.Clients
     {
         private readonly HttpClient _http;
 
-        public NotesClient(IOptions<Options.Services> options)
+        public NotesClient(IOptions<Options.ServiceOptions> options)
         {
             _http = new HttpClient
             {

@@ -14,7 +14,7 @@ namespace ShtikLive.Clients
     {
         private readonly HttpClient _http;
 
-        public QuestionsClient(IOptions<Options.Services> options)
+        public QuestionsClient(IOptions<Options.ServiceOptions> options)
         {
             _http = new HttpClient
             {

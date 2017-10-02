@@ -7,227 +7,27 @@ body {
   overflow-x: hidden;
   overflow-y: hidden; }
 
+@media screen and (orientation: landscape) {
+  .layout {
+    flex-flow: row nowrap; } }
+
 .layout {
-  width: 100%;
+  width: 100vw;
   height: calc(100% - 60px);
   display: flex;
-  align-items: flex-start; }
+  align-items: stretch; }
+  @media screen and (orientation: landscape) {
+    .layout {
+      flex-direction: row; } }
   @media screen and (orientation: portrait) {
     .layout {
       flex-direction: column; } }
 
-.slide {
-  width: 1920px;
-  height: 1080px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  transform-origin: top left; }
-
-@media screen and (orientation: landscape) and (min-width: 320px) and (max-width: 479px) {
-  .slide {
-    transform: scale(0.125); } }
-
-@media screen and (orientation: landscape) and (min-width: 480px) and (max-width: 599px) {
-  .slide {
-    transform: scale(0.1875); } }
-
-@media screen and (orientation: landscape) and (min-width: 600px) and (max-width: 767px) {
-  .slide {
-    transform: scale(0.23438); } }
-
-@media screen and (orientation: landscape) and (min-width: 768px) and (max-width: 799px) {
-  .slide {
-    transform: scale(0.3); } }
-
-@media screen and (orientation: landscape) and (min-width: 800px) and (max-width: 959px) {
-  .slide {
-    transform: scale(0.3125); } }
-
-@media screen and (orientation: landscape) and (min-width: 960px) and (max-width: 1023px) {
-  .slide {
-    transform: scale(0.375); } }
-
-@media screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1279px) {
-  .slide {
-    transform: scale(0.4); } }
-
-@media screen and (orientation: landscape) and (min-width: 1280px) and (max-width: 1439px) {
-  .slide {
-    transform: scale(0.5); } }
-
-@media screen and (orientation: landscape) and (min-width: 1440px) and (max-width: 1919px) {
-  .slide {
-    transform: scale(0.5625); } }
-
-@media screen and (orientation: landscape) and (min-width: 1920px) and (max-width: 2559px) {
-  .slide {
-    transform: scale(0.75); } }
-
-@media screen and (orientation: landscape) and (min-width: 2560px) and (max-width: 3839px) {
-  .slide {
-    transform: scale(1); } }
-
-@media screen and (orientation: landscape) and (min-width: 3840px) and (max-width: 7679px) {
-  .slide {
-    transform: scale(1.5); } }
-
-@media screen and (orientation: landscape) and (min-width: 7680px) {
-  .slide {
-    transform: scale(3); } }
-
-@media screen and (orientation: portrait) and (min-width: 320px) and (max-width: 479px) {
-  .slide {
-    transform: scale(0.16667); } }
-
-@media screen and (orientation: portrait) and (min-width: 480px) and (max-width: 599px) {
-  .slide {
-    transform: scale(0.25); } }
-
-@media screen and (orientation: portrait) and (min-width: 600px) and (max-width: 767px) {
-  .slide {
-    transform: scale(0.3125); } }
-
-@media screen and (orientation: portrait) and (min-width: 768px) and (max-width: 799px) {
-  .slide {
-    transform: scale(0.4); } }
-
-@media screen and (orientation: portrait) and (min-width: 800px) and (max-width: 959px) {
-  .slide {
-    transform: scale(0.41667); } }
-
-@media screen and (orientation: portrait) and (min-width: 960px) and (max-width: 1023px) {
-  .slide {
-    transform: scale(0.5); } }
-
-@media screen and (orientation: portrait) and (min-width: 1024px) and (max-width: 1279px) {
-  .slide {
-    transform: scale(0.53333); } }
-
-@media screen and (orientation: portrait) and (min-width: 1280px) and (max-width: 1439px) {
-  .slide {
-    transform: scale(0.66667); } }
-
-@media screen and (orientation: portrait) and (min-width: 1280px) and (max-width: 1439px) {
-  .slide {
-    transform: scale(0.66667); } }
-
-@media screen and (orientation: portrait) and (min-width: 1920px) and (max-width: 2559px) {
-  .slide {
-    transform: scale(1); } }
-
-@media screen and (orientation: portrait) and (min-width: 2560px) and (max-width: 3839px) {
-  .slide {
-    transform: scale(1.33333); } }
-
-@media screen and (orientation: portrait) and (min-width: 3840px) and (max-width: 7679px) {
-  .slide {
-    transform: scale(2); } }
-
-@media screen and (orientation: portrait) and (min-width: 7680px) {
-  .slide {
-    transform: scale(4); } }
-
-.slide-container {
-  overflow-x: hidden;
-  overflow-y: hidden;
-  flex: none; }
-  @media screen and (orientation: portrait) {
-    .slide-container {
-      margin-left: auto;
-      margin-right: auto; } }
-  @media screen and (orientation: portrait) and (min-width: 320px) and (max-width: 479px) {
-    .slide-container {
-      width: 320px;
-      height: 180px; } }
-  @media screen and (orientation: portrait) and (min-width: 480px) and (max-width: 599px) {
-    .slide-container {
-      width: 480px;
-      height: 270px; } }
-  @media screen and (orientation: portrait) and (min-width: 600px) and (max-width: 767px) {
-    .slide-container {
-      width: 600px;
-      height: 338px; } }
-  @media screen and (orientation: portrait) and (min-width: 768px) and (max-width: 799px) {
-    .slide-container {
-      width: 768px;
-      height: 432px; } }
-  @media screen and (orientation: portrait) and (min-width: 800px) and (max-width: 959px) {
-    .slide-container {
-      width: 800px;
-      height: 450px; } }
-  @media screen and (orientation: portrait) and (min-width: 960px) and (max-width: 1023px) {
-    .slide-container {
-      width: 960px;
-      height: 540px; } }
-  @media screen and (orientation: portrait) and (min-width: 1024px) and (max-width: 1279px) {
-    .slide-container {
-      width: 1024px;
-      height: 576px; } }
-  @media screen and (orientation: portrait) and (min-width: 1280px) and (max-width: 1439px) {
-    .slide-container {
-      width: 1280px;
-      height: 720px; } }
-  @media screen and (orientation: portrait) and (min-width: 1920px) and (max-width: 2559px) {
-    .slide-container {
-      width: 1920px;
-      height: 1080px; } }
-  @media screen and (orientation: portrait) and (min-width: 2560px) and (max-width: 3839px) {
-    .slide-container {
-      width: 1920px;
-      height: 1080px; } }
-  @media screen and (orientation: portrait) and (min-width: 3840px) and (max-width: 7679px) {
-    .slide-container {
-      width: 1920px;
-      height: 1080px; } }
-  @media screen and (orientation: portrait) and (min-width: 7680px) {
-    .slide-container {
-      width: 1920px;
-      height: 1080px; } }
-
-@media screen and (orientation: landscape) and (min-width: 320px) and (max-width: 479px) {
-  .slide-container {
-    width: 240px;
-    height: 135px; } }
-
-@media screen and (orientation: landscape) and (min-width: 480px) and (max-width: 599px) {
-  .slide-container {
-    width: 360px;
-    height: 203px; } }
-
-@media screen and (orientation: landscape) and (min-width: 600px) and (max-width: 767px) {
-  .slide-container {
-    width: 450px;
-    height: 254px; } }
-
-@media screen and (orientation: landscape) and (min-width: 768px) and (max-width: 799px) {
-  .slide-container {
-    width: 576px;
-    height: 324px; } }
-
-@media screen and (orientation: landscape) and (min-width: 800px) and (max-width: 959px) {
-  .slide-container {
-    width: 600px;
-    height: 338px; } }
-
-@media screen and (orientation: landscape) and (min-width: 960px) and (max-width: 1023px) {
-  .slide-container {
-    width: 720px;
-    height: 405px; } }
-
-@media screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1279px) {
-  .slide-container {
-    width: 768px;
-    height: 432px; } }
-
-@media screen and (orientation: landscape) and (min-width: 1280px) and (max-width: 1439px) {
-  .slide-container {
-    width: 960px;
-    height: 540px; } }
-
-@media screen and (orientation: landscape) and (min-width: 1920px) and (max-width: 2559px) {
-  .slide-container {
-    width: 1440px;
-    height: 810px; } }
+.slide-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-grow: 1; }
 
 @media screen and (orientation: landscape) {
   .controls {

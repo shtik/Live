@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Semantics;
 using Microsoft.Extensions.Logging;
@@ -15,14 +16,16 @@ namespace ShtikLive.Controllers
     public class PresentController : Controller
     {
         private readonly IShowsClient _shows;
+        private readonly ISlidesClient _slides;
         private readonly IQuestionsClient _questions;
         private readonly ILogger<PresentController> _logger;
         private readonly IApiKeyProvider _apiKeyProvider;
 
-        public PresentController(IApiKeyProvider apiKeyProvider, IShowsClient shows, ILogger<PresentController> logger, IQuestionsClient questions)
+        public PresentController(IApiKeyProvider apiKeyProvider, IShowsClient shows, ISlidesClient slides, ILogger<PresentController> logger, IQuestionsClient questions)
         {
             _apiKeyProvider = apiKeyProvider;
             _shows = shows;
+            _slides = slides;
             _logger = logger;
             _questions = questions;
         }
@@ -65,9 +68,12 @@ namespace ShtikLive.Controllers
         [HttpPut("{handle}/{slug}/{number}")]
         public async Task<IActionResult> ShowSlide(string handle, string slug, int number, CancellationToken ct)
         {
-            var ok = await _shows.ShowSlide(handle, slug, number, ct);
+            var (ok, uri) = await MultiTask.WhenAll(
+                _shows.ShowSlide(handle, slug, number, ct),
+                _slides.Upload(handle, slug, number, Request.ContentType, Request.Body, ct)
+            );
             if (!ok) return NotFound();
-            return Accepted();
+            return Accepted(uri);
         }
     }
 }

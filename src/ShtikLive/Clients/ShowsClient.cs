@@ -16,7 +16,7 @@ namespace ShtikLive.Clients
     {
         private readonly HttpClient _http;
 
-        public ShowsClient(IOptions<Options.Services> options)
+        public ShowsClient(IOptions<Options.ServiceOptions> options)
         {
             _http = new HttpClient
             {

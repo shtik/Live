@@ -37,8 +37,9 @@ namespace ShtikLive
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.Configure<Options.Services>(Configuration.GetSection("Services"));
+            services.Configure<Options.ServiceOptions>(Configuration.GetSection("Services"));
             services.AddSingleton<IShowsClient, ShowsClient>();
+            services.AddSingleton<ISlidesClient, SlidesClient>();
             services.AddSingleton<INotesClient, NotesClient>();
             services.AddSingleton<IQuestionsClient, QuestionsClient>();
 

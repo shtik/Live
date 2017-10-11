@@ -283,12 +283,7 @@ var Shtik;
         var questionsForm;
         var nav;
         var hubConnection;
-        document.addEventListener("DOMContentLoaded", () => {
-            notesForm = new NotesForm();
-            notesForm.load();
-            questionsForm = new QuestionsForm();
-            questionsForm.load();
-            nav = new NavButtons();
+        function hubConnect() {
             hubConnection = new signalR.HubConnection("/realtime");
             hubConnection.on("Send", data => {
                 if (data.slideAvailable) {
@@ -297,11 +292,23 @@ var Shtik;
                     nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
                 }
             });
+            hubConnection.onclose(e => {
+                console.error(e.message);
+                setTimeout(hubConnect, 1000);
+            });
             hubConnection.start()
                 .then(() => {
-                const groupName = window.location.pathname.replace(/\/[0-9]+$/, "");
+                const groupName = window.location.pathname.replace("/live/", "").replace(/\/[0-9]+$/, "");
                 hubConnection.invoke("Join", groupName);
             });
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            notesForm = new NotesForm();
+            notesForm.load();
+            questionsForm = new QuestionsForm();
+            questionsForm.load();
+            nav = new NavButtons();
+            hubConnect();
         });
     })(AutoNav = Shtik.AutoNav || (Shtik.AutoNav = {}));
 })(Shtik || (Shtik = {}));

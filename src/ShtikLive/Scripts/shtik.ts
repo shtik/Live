@@ -10,10 +10,12 @@ declare namespace signalR {
 
     export class HubConnection {
         constructor(path: string);
-        on(method: string, action: (data: LiveMessage) => void);
+        on(method: string, action: (data: LiveMessage) => void): void;
+        onclose(callback: ConnectionClosed): void;
         invoke(method: string, data: any);
         start(): Promise<any>;
     }
+    export type ConnectionClosed = (e?: Error) => void;
 }
 
 namespace Shtik.AutoNav {
@@ -26,6 +28,26 @@ namespace Shtik.AutoNav {
     var nav: NavButtons;
     var hubConnection: signalR.HubConnection;
 
+    function hubConnect() {
+        hubConnection = new signalR.HubConnection("/realtime");
+        hubConnection.on("Send",
+            data => {
+                if (data.slideAvailable) {
+                    if (notesForm.dirty || questionsForm.dirty) return;
+                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
+                }
+            });
+        hubConnection.onclose(e => {
+            console.error(e.message);
+            setTimeout(hubConnect, 1000);
+        });
+        hubConnection.start()
+            .then(() => {
+                const groupName = window.location.pathname.replace("/live/", "").replace(/\/[0-9]+$/, "");
+                hubConnection.invoke("Join", groupName);
+            });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
 
         notesForm = new NotesForm();
@@ -36,18 +58,6 @@ namespace Shtik.AutoNav {
 
         nav = new NavButtons();
 
-        hubConnection = new signalR.HubConnection("/realtime");
-        hubConnection.on("Send",
-            data => {
-                if (data.slideAvailable) {
-                    if (notesForm.dirty || questionsForm.dirty) return;
-                    nav.go(window.location.pathname.replace(/\/[0-9]+$/, `/${data.slideAvailable}`));
-                }
-            });
-        hubConnection.start()
-            .then(() => {
-                const groupName = window.location.pathname.replace(/\/[0-9]+$/, "");
-                hubConnection.invoke("Join", groupName);
-            });
+        hubConnect();
     });
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using ShtikLive.Hubs.Models;
 using ShtikLive.Models.Live;
 
 namespace ShtikLive.Hubs
@@ -21,5 +21,14 @@ namespace ShtikLive.Hubs
         {
             await Clients.Group(groupName).InvokeAsync("Send", message);
         }
+    }
+
+    public static class LiveHubExtensions
+    {
+        public static Task SendSlideAvailable(this IHubContext<LiveHub> context, string presenter, string slug, int slideNumber) =>
+            SendSlideAvailable(context, $"{presenter}/{slug}", slideNumber);
+
+        public static Task SendSlideAvailable(this IHubContext<LiveHub> context, string groupName, int slideNumber) =>
+            context.Clients.Group(groupName).InvokeAsync("SlideAvailable", new SlideAvailable {Number = slideNumber});
     }
 }

@@ -70,15 +70,12 @@ namespace ShtikLive.Controllers
         [HttpGet("{presenter}/{slug}/{number:int}/partial")]
         public async Task<IActionResult> GetSlidePartial(string presenter, string slug, int number)
         {
-            var (show, slide) =
-                await MultiTask.WhenAll(_shows.Get(presenter, slug), _shows.GetSlide(presenter, slug, number));
-            if (show == null || (slide == null || !slide.HasBeenShown)) return NotFound();
+            var show = await _shows.Get(presenter, slug);
+            if (show == null || show.HighestSlideShown < number) return NotFound();
 
             var slidePartial = new SlidePartial
             {
-                Layout = slide.Layout,
-                Html = ProcessSlideHtml(slide.Html),
-                Title = slide.Title
+                SlideImageUrl = $"/slides/{presenter}/{slug}/{number}"
             };
 
             return Ok(slidePartial);

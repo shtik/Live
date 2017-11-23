@@ -1,0 +1,88 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: web
+  namespace: shtik
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - image: shtik/web:1.1.0
+        imagePullPolicy: Always
+        name: web
+        env:
+          - name: Services__Shows__BaseUrl
+            value: "http://shows"
+          - name: Services__Slides__BaseUrl
+            value: "http://slides"
+          - name: Services__Notes__BaseUrl
+            value: "http://notes"
+          - name: Services__Questions__BaseUrl
+            value: "http://questions"
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: web-db
+                key: connstr
+          - name: Authentication__Twitter__ConsumerKey
+            valueFrom:
+              secretKeyRef:
+                name: twitter
+                key: consumerKey
+          - name: Authentication__Twitter__ConsumerSecret
+            valueFrom:
+              secretKeyRef:
+                name: twitter
+                key: consumerSecret
+          - name: Security__ApiKeyHashPhrase
+            valueFrom:
+              secretKeyRef:
+                name: api-key
+                key: hashPhrase
+          - name: DataProtection__AzureStorageConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: dp
+                key: connstr
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: shtik
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: web
+  sessionAffinity: ClientIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web
+  namespace: shtik
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - shtik.io
+    secretName: shtik-tls
+  rules:
+  - host: shtik.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web
+          servicePort: 80

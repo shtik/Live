@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.WindowsAzure.Storage;
 using ShtikLive.Clients;
 using ShtikLive.Hubs;
 using ShtikLive.Identity;
@@ -63,19 +65,21 @@ namespace ShtikLive
 
             services.AddSingleton<IApiKeyProvider, ApiKeyProvider>();
 
-            //services.AddLiveWebSockets(Configuration);
-
             if (!_env.IsDevelopment())
             {
-                var blobUri = Configuration.GetValue("DataProtection:BlobUri", string.Empty);
-                if ((!string.IsNullOrWhiteSpace(blobUri)) && Uri.TryCreate(blobUri, UriKind.Absolute, out var uri))
+                var connectionString = Configuration.GetValue("DataProtection:AzureStorageConnectionString", string.Empty);
+                if ((!string.IsNullOrWhiteSpace(connectionString)) &&
+                    CloudStorageAccount.TryParse(connectionString, out var cloudStorageAccount))
                 {
-                    services.AddDataProtection().PersistKeysToAzureBlobStorage(uri);
+                    services.AddDataProtection().PersistKeysToAzureBlobStorage(cloudStorageAccount, "keys/keys.xml");
                 }
             }
 
             services.AddMvc();
-            services.AddSignalR();
+            services.AddSignalR().AddRedis(o =>
+            {
+                o.Options.EndPoints.Add("redis", 6379);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: web-migrate
+  namespace: shtik
+spec:
+  template:
+    metadata:
+      name: web-migrate
+    spec:
+      containers:
+      - name: web-migrate
+        image: shtik/web-migrate:1.1.0
+        args: ["$(SECRET_CONNSTR)"]
+        env:
+          - name: SECRET_CONNSTR
+            valueFrom:
+              secretKeyRef:
+                name: web-db
+                key: connstr
+      restartPolicy: OnFailure

@@ -35,7 +35,7 @@ namespace ShtikLive.Clients
             content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
 
             var uri = $"{presenter}/{show}/{index}";
-            var response = await _uploadPolicy.ExecuteAsync(() => _http.PostAsync(uri, content, ct));
+            var response = await _uploadPolicy.ExecuteAsync(() => _http.PutAsync(uri, content, ct));
             return response == null ? null : uri;
         }
 

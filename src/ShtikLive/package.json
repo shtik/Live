@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/shtik/Live#readme",
   "dependencies": {
-    "@aspnet/signalr-client": "^1.0.0-alpha1-final"
+    "@aspnet/signalr-client": "^1.0.0-alpha2-final"
   }
 }

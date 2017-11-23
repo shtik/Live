@@ -207,9 +207,7 @@ var Shtik;
                             return;
                         }
                         const partial = JSON.parse(json);
-                        const article = document.querySelector("article#slide");
-                        article.innerHTML = partial.html;
-                        article.className = partial.layout;
+                        this._image.style.backgroundImage = `url(${partial.slideImageUrl})`;
                     });
                 };
                 this.go = (href) => {
@@ -262,6 +260,7 @@ var Shtik;
                 this._next.addEventListener("click", this._onNext);
                 this._last = document.querySelector("button#last-btn");
                 this._last.addEventListener("click", this._onLast);
+                this._image = document.querySelector("div#slide-image");
                 window.addEventListener("popstate", this.transition);
             }
         }

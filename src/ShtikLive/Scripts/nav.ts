@@ -1,8 +1,6 @@
 ﻿namespace Shtik.Nav {
     interface IPartial {
-        html: string;
-        layout: string;
-        title: string;
+        slideImageUrl: string;
     }
 
     function loadSlide(url: string) {
@@ -16,6 +14,7 @@
         private _previous: HTMLButtonElement;
         private _next: HTMLButtonElement;
         private _last: HTMLButtonElement;
+        private _image: HTMLDivElement;
 
         constructor() {
             this._first = document.querySelector("button#first-btn") as HTMLButtonElement;
@@ -30,6 +29,8 @@
             this._last = document.querySelector("button#last-btn") as HTMLButtonElement;
             this._last.addEventListener("click", this._onLast);
 
+            this._image = document.querySelector("div#slide-image") as HTMLDivElement;
+
             window.addEventListener("popstate", this.transition);
         }
 
@@ -42,9 +43,7 @@
                         return;
                     }
                     const partial = JSON.parse(json) as IPartial;
-                    const article = document.querySelector("article#slide") as HTMLDivElement;
-                    article.innerHTML = partial.html;
-                    article.className = partial.layout;
+                    this._image.style.backgroundImage = `url(${partial.slideImageUrl})`;
                 });
         }
 
